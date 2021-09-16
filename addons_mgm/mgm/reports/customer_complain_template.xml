@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="customer_complain_document">
+		<t t-name="customer_complain_document">
+			<div style="font-size:14px">
+				<div class="header">
+					<table style="width:100%;border: 1px solid black;text-align:center;">
+						<tr rowspan="2">
+							<th style="border: 1px solid black;width:20%;vertical-align: middle;" rowspan="2">
+								<img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+							</th>
+							<th style="border: 1px solid black;width:80%;vertical-align: middle;font-size:13px;font-weight: bold">FORM</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black;width:80%;vertical-align: middle;font-size:13px;font-weight: bold">Keluhan Customer</th>
+						</tr>
+					</table>
+				</div>
+				<br/>
+				<div class="page">
+					<table style="width: 100%">
+						<tr>
+							<td style="width:70%">Tanggal Keluhan   :</td>
+							<td style="width:30%">No. SQ/SO         : <span t-field="doc.name"/></td>
+						</tr>
+						<tr>
+							<td style="width:50%">Nama Customer     : <span t-field="doc.partner_id.name"/></td>
+						</tr>
+						<tr>
+							<td style="width:50%">Alamat            : <span t-field="doc.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/></td>
+						</tr>
+					</table>
+					<br/>
+					<table style="width:100%;table-layout:fixed;text-align:center;vertical-align: middle;">
+						<tr style="border: 1px solid black;width:100%">
+							<th style="border: 1px solid black;width:5%">No</th>
+							<th style="border: 1px solid black;width:30%">Detail Keluhan</th>
+							<th style="border: 1px solid black;width:35%">Uraian Tindakan<br/>Perbaikan dan Pencegahan</th>
+							<th style="border: 1px solid black;width:10%">PIC &amp; Dept</th>
+							<th style="border: 1px solid black;width:10%">Due Date</th>
+							<th style="border: 1px solid black;width:10%">Paraf</th>
+						</tr>
+						<tr style="border: 1px solid black;">
+							<td style="border: 1px solid black;height:20cm"></td>
+							<td style="border: 1px solid black;height:20cm"></td>
+							<td style="border: 1px solid black;height:20cm"></td>
+							<td style="border: 1px solid black;height:20cm"></td>
+							<td style="border: 1px solid black;height:20cm"></td>
+							<td style="border: 1px solid black;height:20cm"></td>
+						</tr>
+					</table>
+					<br/>
+					<div class="row">
+						<div class="col-4"></div>
+						<div class="col-4"></div>
+						<div class="col-4">
+							<table style="text-align:center">
+								<tr>
+									<td>Diketahui Oleh,</td>
+								</tr>
+								<tr style="height:2.5cm">
+									<td></td>
+								</tr>
+								<t t-if="user.has_group('mgm.mgm_group_sales_project') and not user.has_group('mgm.mgm_group_sales_retail')">
+									<tr>
+										<td>(.....................................................)<br/>
+											Director
+										</td>
+									</tr>
+								</t>
+								<t t-else="">
+									<tr>
+										<td>(.....................................................)<br/>
+											Manager Sales
+										</td>
+									</tr>
+								</t>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="customer_complain">
+		<t t-name="studio_main_report">
+			<t t-call="web.basic_layout">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="mgm.customer_complain_document"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

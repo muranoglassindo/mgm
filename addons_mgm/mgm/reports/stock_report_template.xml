@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="external_layout_standard_mgm">
+		<t t-name="external_layout_standard_mgm">
+			<div class="header" style="font-size: 15px">
+				<div class="row">
+					<div class="col-9">
+						<div class="text-center" style="font-weight: bold"><li class="list-inline-item d-inline"><span t-field="company.partner_id"/></li></div>
+						<div class="text-center"><li class="list-inline-item d-inline"><span t-field="company.street"/></li></div>
+						<div class="text-center"><li class="list-inline-item d-inline"><span t-field="company.phone"/></li></div>
+						<div class="text-center"><li class="list-inline-item d-inline"><span t-field="company.email"/></li></div>
+					</div>
+					<div class="col-3">
+						<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="width:100%; max-height: 55px; float: right;" alt="Logo"/>
+						<span style="font-size:11px; position: absolute; top:70px">FR-LDG-01-01/0</span>
+					</div>
+				</div>
+				<div t-if="company.logo or company.report_header" class="row zero_min_height">
+					<div class="col-12">
+						<div style="border-bottom: 1px solid black;"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+				<t t-call="web.address_layout"/>
+				<t t-raw="0"/>
+			</div>
+		</t>
+	</template>
+
+	<template id="external_layout_mgm">
+		<t t-name="external_layout_mgm">
+			<t t-if="not o" t-set="o" t-value="doc"/>
+
+			<t t-if="not company">
+				<!-- Multicompany -->
+				<t t-if="company_id">
+					<t t-set="company" t-value="company_id"/>
+				</t>
+				<t t-elif="o and 'company_id' in o">
+					<t t-set="company" t-value="o.company_id.sudo()"/>
+				</t>
+				<t t-else="">
+					<t t-set="company" t-value="res_company"/>
+				</t>
+			</t>
+
+			<t t-esc="company.update_scss()"/>
+
+			<t t-call="mgm.external_layout_standard_mgm"><t t-raw="0"/></t>
+
+		</t>
+	</template>
+
+	<template id="stock_picking_report_document">
+		<t t-name="stock_picking_report_document">
+			<t t-call="mgm.external_layout_mgm">
+				<style>
+					.mgm_table{
+					margin-top: 5px;
+					border: 1px solid black;
+					width:100%;
+					border-collapse: collapse;
+					}
+					.mgm_table th{
+					border: 1px solid black;
+					padding: 0px 5px
+					}
+					.mgm_table td{
+					border-right: solid 1px black;
+					border-left: solid 1px black;
+					}
+					.show-line{
+					border: solid 1px black;
+					}
+				</style>
+				<div t-if="doc.verified not in ('true') or not user.has_group('mgm.mgm_group_logistic')">
+					<div style="position:absolute;opacity:0.15;transform:rotate(70deg);-webkit-transform:rotate(335deg);width:90%;text-align:center;top:100px;color:red;">
+						<p style="font-size:170px;">INVALID</p>
+					</div>
+				</div>
+				<div class="page" style="margin: 0px; padding: 0px; font-size: 11px;">
+					<div class="row">
+						<div class="col-12 text-center">
+							<b>DELIVERY ORDER</b>
+						</div>
+					</div>
+					<table>
+						<tr>
+							<td width="50px">TANGGAL</td>
+							<td width="25px">:</td>
+							<td width="300px"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%b-%Y')"/></td>
+							<td width="80px">CUSTOMER</td>
+							<td width="20px">:</td>
+							<td width="300px"><t t-esc="doc.partner_id.name"/></td>
+						</tr>
+						<tr>
+							<td>JAM</td>
+							<td>:</td>
+							<td><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%H:%M')"/></td>
+							<td valign="top">ALAMAT</td>
+							<td valign="top">:</td>
+<!--							TODO: Jadiin Alamatnya sebaris-->
+							<td>
+								<div t-field="doc.partner_id"
+										t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+							</td>
+						</tr>
+						<tr>
+							<td>NO. SJ</td>
+							<td>:</td>
+							<td><t t-esc="doc.name"/></td>
+						</tr>
+						<tr>
+							<td>NO. SQ</td>
+							<td>:</td>
+							<td><t t-esc="doc.origin"/></td>
+							<td>NO. TELP</td>
+							<td>:</td>
+							<td><t t-esc="doc.partner_id.phone"/></td>
+						</tr>
+					</table>
+					<!--<p style="page-break-before:always;"></p>-->
+					<table class="mgm_table">
+						<thead class="text-center">
+							<tr>
+								<th rowspan="2">NO</th>
+								<th rowspan="2">KOFG</th>
+								<th rowspan="2">DESKRIPSI BARANG</th>
+								<th rowspan="2">ITEM</th>
+								<th colspan="2">FINISH GOOD</th>
+								<th rowspan="2">QTY</th>
+								<th rowspan="2">KETERANGAN</th>
+								<tr>
+									<th>W</th>
+									<th>H</th>
+								</tr>
+							</tr>
+						</thead>
+						<tbody>
+							<t t-set="no" t-value="0"/>
+							<t t-set="total_qty" t-value="0"/>
+							<t t-foreach="doc.move_ids_without_package" t-as="product">
+								<t t-set="no" t-value="no+1"/>
+								<tr>
+									<td class="text-center"><span t-esc="no"/></td>
+									<td class="text-center">
+										<t t-foreach="product.product_id.product_template_attribute_value_ids" t-as="attributes">
+											<t t-if="attributes.attribute_id.name == 'Routing'">
+												<span t-field="attributes.name"/>
+											</t>
+										</t>
+									</td>
+									<td style="padding-left: 5px; padding-right: 5px"><span t-field="product.product_id"/></td>
+									<td class="text-center" style="padding-left: 5px; padding-right: 5px"><span t-esc="no"/></td>
+									<td class="text-center" style="padding-left: 5px; padding-right: 5px"><span t-field="product.width"/></td>
+									<td class="text-center" style="padding-left: 5px; padding-right: 5px"><span t-field="product.height"/></td>
+									<td class="text-center" style="padding-left: 5px; padding-right: 5px"><t t-esc='"%.0f" % product.product_uom_qty'/></td>
+									<t t-set="total_qty" t-value="total_qty+product.product_uom_qty"/>
+									<td class="text-left" style="padding-left: 5px; padding-right: 5px"><span t-field="product.description"/></td>
+								</tr>
+							</t>
+							<t t-foreach="8-len(doc.move_ids_without_package)" t-as="x">
+								<tr>
+									<td style="height:5mm"></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</t>
+							<tr>
+								<td colspan="6" class="text-center show-line">Jumlah</td>
+								<td class="text-center show-line"><span t-esc='"%.0f" % total_qty'/></td>
+								<td class="text-center show-line">Lembar</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div>
+					<dt class="font-italic" style="font-size: 10px;">
+						NOTE : 1. Barang diatas diterima dengan baik dan cukup</dt>
+					<dd class="font-italic" style="font-size: 10px; text-indent: 0.33in">2. Perusahaan tidak menerima komplain atas ketidak sesuaian barang yang diterima oleh customer apabila surat jalan sudah di tandatangani
+					</dd>
+					<div class="row" style="font-size: 12px;">
+						<div class="col-2 offset-1 text-center">
+							Penerima,
+							<t t-if="doc.partner_id.signature">
+								<br/>
+								<img t-att-src="image_data_uri(doc.partner_id.signature)" style="height: 1.2cm; max-width: 1.2cm;"/><br/>
+							</t>
+							<t t-else="">
+								<br/>
+								<br/>
+								<br/>
+							</t>
+							<span>(<t t-esc="doc.partner_id.name"/>)</span><br></br>
+							<span>Customer</span>
+						</div>
+						<div class="col-2 text-center">
+							Pengirim,
+							<br/>
+							<br/>
+							<br/>
+							<span>(..............................)</span><br></br>
+							<span>Supir</span>
+						</div>
+						<div class="col-2 text-center">
+							Security,
+							<br/>
+							<br/>
+							<br/>
+							<span>(..............................)</span><br></br>
+							<span>Security</span>
+						</div>
+						<div class="col-2 text-center">
+							Dimuat oleh,
+							<t t-if="request.env.user.has_group('mgm.mgm_group_logistic')" class="mt32 ml64 mr4" name="signature">
+								<t t-if="request.env.user.signature">
+									<br/>
+									<img t-att-src="image_data_uri(request.env.user.signature)" style="height: 1.2cm; max-width: 1.2cm;"/><br/>
+								</t>
+								<t t-else="">
+									<br/>
+									<br/>
+									<br/>
+								</t>
+							</t>
+							<t t-if="request.env.user.has_group('mgm.mgm_group_logistic')" class="mt32 ml64 mr4" name="name">
+								(<span t-field="request.env.user.name"/>)
+							</t>
+							<t t-else="">
+								<span>(..............................)</span>
+							</t><br></br>
+							<span>Logistic</span>
+						</div>
+						<div class="col-2 text-center">
+							Mengetahui,
+							<t t-if="doc.accounting_id">
+								<t t-if="doc.accounting_id.signature">
+									<br/>
+									<img t-att-src="image_data_uri(doc.accounting_id.signature)" style="height: 1.2cm; max-width: 1.2cm;"/><br/>
+								</t>
+							</t>
+							<t t-else="">
+								<br/>
+								<br/>
+								<br/>
+							</t>
+							<t t-if="doc.accounting_id">
+								(<span t-field="doc.accounting_id.name"/>)
+							</t>
+							<t t-else="">
+								<span>(..............................)</span>
+							</t><br></br>
+							<span>PT. MGM</span>
+						</div>
+					</div>
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<template id="stock_picking_report">
+		<t t-name="stock_picking_report">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="mgm.stock_picking_report_document"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

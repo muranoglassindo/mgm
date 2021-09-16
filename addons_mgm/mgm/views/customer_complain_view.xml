@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="customer_complain_form">
+		<field name="name">customer.complain.form</field>
+		<field name="model">customer.complain</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+<!--					TODO: invisible button hanya untuk penanggung jawabnya-->
+					<button name="action_validate" id="action_validate"
+							string="Confirm" type="object" attrs="{'invisible': [('state', 'not in', ('wip','not_yet'))]}"/>
+					<field name="state" widget="statusbar" statusbar_visible="wip,done"/>
+				</header>
+				<sheet>
+					<h1><field name="name" attrs="{'invisible': [('name', '=', False)]}" readonly="True"/></h1>
+					<group>
+						<field name="date"/>
+						<field name="sale_id"/>
+						<field name="partner_id" attrs="{'invisible': [('partner_id', '=', False)]}" readonly="True"/>
+						<field name="report"/>
+						<field name="action"/>
+						<field name="pic"/>
+						<field name="due_date"/>
+						<field name="information"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="customer_complain_tree">
+		<field name="name">customer.complain.tree</field>
+		<field name="model">customer.complain</field>
+		<field name="arch" type="xml">
+			<tree decoration-danger="due_date&lt;current_date and state != 'done'">
+				<field name="date"/>
+				<field name="sale_id"/>
+				<field name="partner_id"/>
+				<field name="report"/>
+				<field name="action"/>
+				<field name="pic"/>
+				<field name="information"/>
+				<field name="due_date"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="customer_complain_search">
+		<field name="name">customer.complain.search</field>
+		<field name="model">customer.complain</field>
+		<field name="arch" type="xml">
+			<search string="Customer Complain">
+				<field name="name"/>
+				<field name="partner_id"/>
+				<field name="sale_id"/>
+				<field name="pic"/>
+				<field name="due_date"/>
+				<field name="state"/>
+				<filter string="Done" name="done" domain="[('state','=','done')]"/>
+				<filter string="WIP" name="wip" domain="[('state','=','wip')]"/>
+				<filter string="Not Yet" name="not_yet" domain="[('state','=','not_yet')]"/>
+				<filter name="group_by_partner_id" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+				<filter name="group_by_sale_id" string="SQ/SO" domain="[]" context="{'group_by':'sale_id'}"/>
+				<filter name="group_by_pic" string="PIC &amp; Dept" domain="[]" context="{'group_by':'pic'}"/>
+				<filter name="group_by_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+			</search>
+		</field>
+	</record>
+
+</odoo>

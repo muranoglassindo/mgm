@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+<!--		SPK-->
+		<record id="paperformat_report_spk" model="report.paperformat">
+			<field name="name">Format Report SPK</field>
+			<field name="default" eval="False"/>
+			<field name="format">A5</field>
+			<field name="orientation">Landscape</field>
+			<field name="margin_top">5</field>
+			<field name="margin_bottom">5</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">35</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				string="SPK"
+				id="mrp.action_report_production_order"
+				model="mrp.production"
+				report_type="qweb-pdf"
+				paperformat="mgm.paperformat_report_spk"
+				name="mgm.spk_report"
+				file="mgm.spk_report"
+				print_report_name="'SPK - %s' % (object.name)"
+				groups="mgm.mgm_group_production,mgm.mgm_group_logistic,mgm.mgm_group_ppic"
+		/>
+
+<!--		Barcode-->
+
+		<record id="paperformat_barcode" model="report.paperformat">
+			<field name="name">Format Barcode</field>
+			<field name="default" eval="False"/>
+			<field name="format">custom</field>
+			<field name="page_height">52</field>
+			<field name="page_width">84</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">4</field>
+			<field name="margin_bottom">0</field>
+			<field name="margin_left">0</field>
+			<field name="margin_right">0</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">0</field>
+			<field name="dpi">96</field>
+		</record>
+
+<!--		TODO: groupnya gatau bener gatau engga-->
+		<report
+				string="Barcode"
+				id="action_barcode_fg"
+				model="mrp.production"
+				report_type="qweb-pdf"
+				paperformat="mgm.paperformat_barcode"
+				name="mgm.barcode_fg"
+				file="mgm.barcode_fg"
+				print_report_name="'Barcode - %s' % (object.name)"
+				groups="mgm.mgm_group_production,mgm.mgm_group_logistic,mgm.mgm_group_ppic"
+		/>
+
+		<report id="mrp.label_manufacture_template"
+				model="mrp.production"
+				string="Finished Product Label (ZPL)"
+				name="mrp.label_production_view"
+				file="mrp.label_production_view"
+				report_type="qweb-text"
+				menu="False"
+		/>
+
+		<report
+				string="Finished Product Label (PDF)"
+				id="mrp.action_report_finished_product"
+				model="mrp.production"
+				name="mrp.label_production_view_pdf"
+				file="mrp.label_production_view_pdf"
+				report_type="qweb-pdf"
+				print_report_name="'Finished products - %s' % object.name"
+				menu="False"
+		/>
+	</data>
+</odoo>

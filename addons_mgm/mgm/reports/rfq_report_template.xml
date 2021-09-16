@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_rfq_document">
+		<t t-name="report_rfq_document">
+			<div class="header">
+				<table style="border: 1px solid black;text-align:center;" width="100%" class="mgm_table;page-break-inside: avoid;">
+					<tr rowspan="2">
+						<th style="border: 1px solid black;width:20%;vertical-align: middle;" rowspan="4">
+							<img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+						</th>
+						<th style="border: 1px solid black;width:50%;vertical-align: middle;font-size:13px" rowspan="2">FORM</th>
+						<td style="border: 1px solid black;width:10%;text-align:left;font-size:10px;padding-left: 5px">No. Dokumen</td>
+						<td style="border: 1px solid black;font-size:10px; padding-left: 5px">
+							<span t-field="doc.name"/>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;width:10%;text-align:left;font-size:10px; padding-left: 5px">Tanggal Berlaku</td>
+						<td style="border: 1px solid black;font-size:10px; padding-left: 5px">
+							<t t-if="doc.date_approve">
+								<span t-field="doc.date_approve" t-options='{"widget": "date", "format": "dd MMMM YYYY"}'/>
+							</t>
+							<t t-else="">
+								-
+							</t>
+						</td>
+					</tr>
+					<tr>
+						<th style="border: 1px solid black;width:50%;vertical-align: middle;font-size:13px" rowspan="2">Request for Quotation</th>
+						<td style="border: 1px solid black;width:10%;text-align:left;font-size:10px; padding-left: 5px">Revisi Ke-</td>
+						<td style="border: 1px solid black;font-size:10px; padding-left: 5px">
+							<t t-if="doc.revision != 0">
+								<span t-field="doc.revision"/>
+							</t>
+							<t t-else="">
+								-
+							</t>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid black;width:10%;text-align:left;font-size:10px; padding-left: 5px">Halaman</td>
+						<td style="border: 1px solid black;font-size:10px; padding-left: 5px">
+							<span class="page"/> / <span class="topage"/>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="page">
+				<div t-if="not user.has_group('mgm.mgm_group_purchase')">
+					<div style="position:absolute;opacity:0.15;transform:rotate(55deg);-webkit-transform:rotate(325deg);width:100%;text-align:center;top:500px;color:red;">
+						<p style="font-size:200px;">INVALID</p>
+					</div>
+				</div>
+				<table style="font-size: 12px;width: 100%">
+					<tr width="20%">
+						<th>Date</th>
+						<td>
+							:  <span t-field="doc.create_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+						</td>
+					</tr>
+					<tr width="80%">
+						<th>No. PO</th>
+						<td>
+							:  <span t-field="doc.name"/>
+						</td>
+					</tr>
+				</table>
+
+				<br/>
+
+				<div class="row">
+					<div class="col-6">
+						<table border="1"  style="width: 100%;">
+							<tr>
+								<td style="background-color:#1E90FF;border: 1px solid black;text-align: center;font-size:14px; color: white">VENDOR</td>
+							</tr>
+						</table>
+						<div class="float-left">
+							<span t-field="doc.partner_id.name" style="font-size:12px"/>
+							<span t-field="doc.partner_id" t-options='{"widget": "contact", "fields": ["address","phone","mobile","email"], "no_marker": true}' style="font-size:12px"/>
+						</div>
+					</div>
+					<div class="col-6">
+						<table border="1"  style="width: 100%;">
+							<tr>
+								<td style="background-color:#1E90FF;border: 1px solid black;text-align: center;font-size:14px; color: white">SHIP TO</td>
+							</tr>
+						</table>
+						<span t-field="doc.company_id.name" style="font-size:12px"/>
+						<span t-field="doc.company_id.partner_id" t-options='{"widget": "contact", "fields": ["address","phone","mobile","email"], "no_marker": true}' style="font-size:12px;"/>
+					</div>
+				</div>
+
+				<br/>
+
+				<table style="border: 1px solid black;text-align:center;font-size:12px;border-collapse: collapse;" width="100%" class="page-break-inside: avoid;">
+					<thead style="background-color:#1E90FF; color: white">
+						<tr>
+							<th>NO</th>
+							<th>NAME</th>
+							<th>DESC</th>
+							<th>QUANTITY</th>
+							<th>UNIT</th>
+						</tr>
+					</thead>
+					<tbody>
+						<t t-set="no" t-value="0"/>
+						<t t-foreach="doc.order_line" t-as="line">
+							<t t-set="no" t-value="no + 1"/>
+							<t t-set="desc" t-value="line.name"/>
+							<t t-if="line.width != 0 and line.height != 0">
+								<t t-set="desc" t-value="'%s (%s x %s)' % (line.name, line.width, line.height)"/>
+							</t>
+							<tr>
+								<td style="text-align:center"><span t-esc="no"/></td>
+								<td style="text-align:left;"><span t-field="line.product_id.display_name"/></td>
+								<td style="text-align:left;"><span t-esc="desc"/></td>
+								<td style="text-align:center"><span t-esc="'%.0f'% line.product_qty"/></td>
+								<td style="text-align:center"><span t-field="line.product_id.uom_name"/></td>
+							</tr>
+						</t>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="footer" style="height:4cm">
+				<div class="text-center" style="border-top: 1px solid black;">
+					<p style="text-align:center;font-size:12px;padding-top:5px">
+						PT. Murano Glassindo Makmur<br/>
+						Jl. Raya Cakung Cilincing KM.1, KAV.123 No.8-9 RT.09/RW.03, Kel. Cakung Timur,<br/>
+						Cakung - Jakarta Timur, 13910
+					</p>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="report_rfq">
+		<t t-name="studio_main_report">
+			<t t-call="web.basic_layout">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="mgm.report_rfq_document"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

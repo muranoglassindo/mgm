@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="daily_report_document">
+		<t t-name="studio_report_document">
+			<div style="font-size:14px">
+				<table style="text-align:justify;width:100%">
+					<tr>
+						<td style="width:25%">Tanggal</td>
+						<td style="width:75%">:</td>
+					</tr>
+					<tr>
+						<td style="width:25%">Nama Sales</td>
+						<td style="width:75%">:</td>
+					</tr>
+					<tr>
+						<td style="width:25%">Area</td>
+						<td style="width:72%">:</td>
+					</tr>
+				</table>
+				<br/>
+				<table style="width:100%">
+					<tr>
+						<td style="width:25%">Nama Toko</td>
+						<td style="width:25%">:</td>
+						<td colspan="2" style="width:50%"></td>
+					</tr>
+					<tr>
+						<td style="width:25%">No.Telp/WA</td>
+						<td style="width:25%">:</td>
+						<td colspan="2" style="width:50%"></td>
+					</tr>
+					<tr>
+						<td style="width:25%">Kategori Customer</td>
+						<td style="width:25%">:</td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Toko Kaca</input>
+						</td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Aplikator</input>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Toko Aluminium</input>
+						</td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Kontraktor</input>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"></td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Toko Kusen Aluminium</input>
+						</td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Personal</input>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3"></td>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking">Lainnya....</input>
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<h6>
+					HASIL KUNJUNGAN
+				</h6>
+				<table style="width:100%">
+					<tr>
+						<td style="width:25%"> Bertemu dengan</td>
+						<td style="width:20%">
+							<input type="checkbox" id="oe_import_tracking"> Owner</input>
+						</td>
+						<td style="width:55%">
+							(Nama: ............................................................. ttd: ...........................)
+						</td>
+					</tr>
+					<tr>
+						<td style="width:25%"></td>
+						<td style="width:20%">
+							<input type="checkbox" id="oe_import_tracking"> Karyawan</input>
+						</td>
+						<td style="width:55%">
+							(Nama: ............................................................. ttd: ...........................)
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<p>
+					<h6>
+						ORDERAN (<i style="font-size:10px">Diisi jika ada order</i>)
+					</h6>
+				</p>
+				<table style="width:100%;">
+					<tr>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking"> Tempered</input>
+						</td>
+						<td style="width:75%">
+							:............................................................................................................................................................................
+						</td>
+					</tr>
+					<tr>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking"> Gosok, Coak, Bor</input>
+						</td>
+						<td style="width:75%">
+							:............................................................................................................................................................................
+						</td>
+					</tr>
+					<tr>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking"> Laminated</input>
+						</td>
+						<td style="width:75%">
+							:............................................................................................................................................................................
+						</td>
+					</tr>
+					<tr>
+						<td style="width:25%">
+							<input type="checkbox" id="oe_import_tracking"> Glass</input>
+						</td>
+						<td style="width:75%">
+							:............................................................................................................................................................................
+						</td>
+					</tr>
+					<tr>
+						<td style="width:25%">
+						</td>
+						<td style="width:75%">
+							Total Order Rp:.............................................................................................................................................
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<table style="width:100%">
+					<tr>
+						<td style="width:50%">
+							Dokumen yang diserahkan
+						</td>
+						<td style="width:50%">
+							Dokumen yang diterima
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%">
+							(<i style="font-size:10px">Diserahkan jika sebelumnya belum ada</i>)
+						</td>
+						<td style="width:50%">
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%">
+							<input type="checkbox" id="oe_import_tracking"> Company Profil</input>
+						</td>
+						<td style="width:50%">
+							<input type="checkbox" id="oe_import_tracking"> Kartu Nama Customer</input>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%">
+							<input type="checkbox" id="oe_import_tracking"> Katalog</input>
+						</td>
+						<td style="width:50%;border: 1px solid black;color:#A9A9A9" rowspan="3">
+							Stempel Customer
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%">
+							<input type="checkbox" id="oe_import_tracking"> Kartu Nama Sales</input>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%">
+							<input type="checkbox" id="oe_import_tracking"> Price List</input>
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<h6>
+					KONDISI PASAR
+				</h6>
+				<table style="width:100%;table-layout:fixed">
+					<tr>
+						<td style="width:25%">1. Price Kompetitor</td>
+						<td><input type="checkbox" id="oe_import_tracking">Maruni</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Magi</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Tamindo</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Supreme</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Lainnya....................</input></td>
+					</tr>
+					<tr>
+						<td style="width:25%">2. Diskon</td>
+						<td><input type="checkbox" id="oe_import_tracking">Maruni</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Magi</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Tamindo</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Supreme</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Lainnya....................</input></td>
+					</tr>
+					<tr>
+						<td style="width:25%">3. Trend Permintaan Kaca</td>
+						<td><input type="checkbox" id="oe_import_tracking">Ramai</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Sedang</input></td>
+						<td><input type="checkbox" id="oe_import_tracking">Sepi</input></td>
+					</tr>
+				</table>
+			</div>
+		</t>
+	</template>
+	<template id="daily_report">
+		<t t-name="studio_main_report">
+			<t t-call="web.basic_layout">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="mgm.daily_report_document"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

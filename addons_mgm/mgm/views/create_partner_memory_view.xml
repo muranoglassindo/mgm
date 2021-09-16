@@ -1,0 +1,21 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="create_partner_memory_form">
+			<field name="name">create.partner.memory.form</field>
+			<field name="model">create.partner.memory</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<p>By pressing the process button, you will create partner data from these leads.</p>
+					</group>
+					<footer>
+						<button string="Proceed" type="object" name="create_partner" class="oe_highlight"/>
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

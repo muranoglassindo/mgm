@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="leads_project_form">
+		<field name="name">leads.project.form</field>
+		<field name="model">leads.project</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="action_confirm" id="action_confirm" string="Confirm" type="object" attrs="{'invisible': [('state', 'in', ['done','closed'])]}" groups="mgm.mgm_group_sales"/>
+					<button name="action_create_partner" id="action_create_partner" string="Create Partner" style="background-color: #4CAF50; color: white" type="object" groups="mgm.mgm_group_sales"/>
+					<field name="state" widget="statusbar" statusbar_visible="followup1,followup2,followup3,done"/>
+				</header>
+				<sheet>
+					<widget name="web_ribbon" title="success" attrs="{'invisible': [('status', '!=', 'success')]}"/>
+					<widget name="web_ribbon" title="failed" bg_color="bg-danger" attrs="{'invisible': [('status', '!=', 'failed')]}"/>
+					<widget name="web_ribbon" title="closed" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'closed')]}"/>
+					<div class="oe_title">
+						<label for="name" class="oe_edit_only"/>
+						<h1><field name="name" placeholder="e.g. Murano Glassindo Makmur"/></h1>
+					</div>
+					<group>
+						<group>
+							<field name="address" readonly="False"/>
+							<field name="city"/>
+							<field name="states"/>
+							<field name="country"/>
+							<field name="zip"/>
+							<field name="phone"/>
+							<field name="email"/>
+							<field name="web"/>
+						</group>
+						<group>
+							<field name="deadline"/>
+							<field name="salesperson"/>
+							<field name="category"/>
+							<field name="project_type"/>
+							<field name="status" readonly="True"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Followup Leads" name="followup_leads">
+							<group>
+								<field name="followup_leads_ids" nolabel="1" readonly="1">
+									<tree>
+										<field name="date"/>
+										<field name="user_id"/>
+										<field name="followup"/>
+										<field name="state"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+						<page string="Contact Person" name="contact_person">
+							<group>
+								<field name="contactperson_ids" nolabel="1">
+									<tree editable="bottom" create="true" delete="true">
+										<field name="name"/>
+										<field name="phone"/>
+										<field name="email"/>
+										<field name="position"/>
+									</tree>
+								</field>
+							</group>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="leads_project_tree">
+		<field name="name">leads.project.tree</field>
+		<field name="model">leads.project</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="deadline"/>
+				<field name="salesperson"/>
+				<field name="name"/>
+				<field name="address"/>
+				<field name="phone"/>
+				<field name="state"/>
+				<field name="status"/>
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="leads_project_search">
+		<field name="name">leads.project.search</field>
+		<field name="model">leads.project</field>
+		<field name="arch" type="xml">
+			<search string="Leads Followup">
+				<field name="salesperson"/>
+				<field name="name"/>
+				<field name="state"/>
+				<field name="status"/>
+				<filter string="Followup 1" name="followup1" domain="[('state','=','followup1')]"/>
+				<filter string="Followup 2" name="followup2" domain="[('state','=','followup2')]"/>
+				<filter string="Followup 3" name="followup3" domain="[('state','=','followup3')]"/>
+				<filter string="Done" name="done" domain="[('state','=','done')]"/>
+				<filter string="Closed" name="closed" domain="[('state','=','closed')]"/>
+				<filter string="WIP" name="wip" domain="[('status','=','wip')]"/>
+				<filter string="Success" name="success" domain="[('status','=','success')]"/>
+				<filter string="Failed" name="failed" domain="[('status','=','failed')]"/>
+				<filter name="group_by_salesperson" string="Sales" domain="[]" context="{'group_by':'salesperson'}"/>
+				<filter name="group_by_name" string="Company" domain="[]" context="{'group_by':'name'}"/>
+				<filter name="group_by_state" string="State Followup" domain="[]" context="{'group_by':'state'}"/>
+				<filter name="group_by_status" string="Status" domain="[]" context="{'group_by':'status'}"/>
+				<filter string="Deadline" name="group_by_month" domain="[]" context="{'group_by': 'deadline'}"/>
+			</search>
+		</field>
+	</record>
+</odoo>

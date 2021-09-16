@@ -1,0 +1,37 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="download_leads_followup_memory_form">
+			<field name="name">leads.followup.memory.form</field>
+			<field name="model">leads.followup.memory</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<p>By pressing the process button, the followup leads template will be downloaded</p>
+					</group>
+					<footer>
+						<button string="Proceed" type="object" name="download_leads_followup" class="oe_highlight"/>
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="upload_leads_followup_memory_form">
+			<field name="name">leads.followup.memory.form</field>
+			<field name="model">leads.followup.memory</field>
+			<field name="arch" type="xml">
+				<form>
+					<group>
+						<field name="leads_followup" required="True"/>
+					</group>
+					<footer>
+						<button string="Proceed" type="object" name="upload_leads_followup" class="oe_highlight"/>
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

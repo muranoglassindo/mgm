@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--	TODO: menu print muncul ketika payment true apabila metode pembayaran CBD-->
+	<record id="view_picking_form_inherit_mgm" model="ir.ui.view">
+		<field name="name">view.picking.form.inherit.mgm</field>
+		<field name="model">stock.picking</field>
+		<field name="inherit_id" ref="stock.view_picking_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//sheet/div[@name='button_box']" position="after">
+				<widget name="web_ribbon" title="done" attrs="{'invisible': [('state', 'not in', ['done'])]}"/>
+			</xpath>
+			<xpath expr="//sheet/group/group[2]/field[@name='origin']" position="after">
+				<label for="verified" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+				<div>
+					<field name="verified" readonly="True" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+					<img src="/mgm/static/img/verified.png" alt="Verified" style="padding-left: 5px; width: 20px" attrs="{'invisible':['|',('verified','=','false'),('picking_type_code', '!=', 'outgoing')]}"/>
+				</div>
+			</xpath>
+			<xpath expr="//header/button[@name='button_validate']" position="attributes">
+				<attribute name="attrs">{'invisible': ['|','|', ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), ('verified', '=', False)]}</attribute>
+				<attribute name="groups">mgm.mgm_group_logistic</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_cancel']" position="attributes">
+				<attribute name="groups">mgm.mgm_group_logistic</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_toggle_is_locked']" position="attributes">
+				<attribute name="groups">mgm.mgm_group_logistic</attribute>
+			</xpath>
+			<xpath expr="//sheet/notebook/page[3]/field/tree/field[@name='product_uom_qty']" position="before">
+				<field name="width"/>
+				<field name="height"/>
+				<field name="area"/>
+				<field name="qty"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="vpicktree_inherit" model="ir.ui.view">
+		<field name="name">stock.picking.inherit.tree</field>
+		<field name="model">stock.picking</field>
+		<field name="inherit_id" ref="stock.vpicktree"/>
+		<field name="arch" type="xml">
+			<xpath expr="//tree/field[@name='state']" position="after">
+				<field name="verified" attrs="{'invisible':[('picking_type_id','=',1)]}"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_picking_internal_search_inherit_mgm" model="ir.ui.view">
+		<field name="name">stock.picking.internal.search.inherit.mgm</field>
+		<field name="model">stock.picking</field>
+		<field name="inherit_id" ref="stock.view_picking_internal_search"/>
+		<field name="arch" type="xml">
+			<xpath expr="//group" position="before">
+				<filter string="Source" name="group_source" domain="[]" context="{'group_by': 'source'}"/>
+				<filter string="Verified" name="group_verified" domain="[]" context="{'group_by': 'verified'}"/>
+			</xpath>
+			<xpath expr="//group/filter[@name='expected_date']" position="replace">
+				<filter string="Scheduled Date" name="expected_date" domain="[]" context="{'group_by': 'scheduled_date:month'}"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="stock.action_picking_tree_ready" model="ir.actions.act_window">
+		<field name="search_view_id" ref="view_picking_internal_search_inherit_mgm"/>
+		<field name="context">{'search_default_available': 1,'search_default_waiting': 1,'search_default_draft': 1,'search_default_group_source': 1,'search_default_group_verified': 3,'search_default_expected_date': 2}</field>
+	</record>
+</odoo>

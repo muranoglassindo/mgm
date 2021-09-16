@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_users_form_inherit" model="ir.ui.view">
+		<field name="name">view.users.form.inherit</field>
+		<field name="model">res.users</field>
+		<field name="inherit_id" ref="base.view_users_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//sheet/div/group/field[@name='partner_id']" position="after">
+				<field name="code"/>
+				<field name="admin_id"/>
+				<field name="area"/>
+<!--				TODO: malah kaya downloadan harusnya muncul gambarnya kaya foto profil-->
+				<field name="signature" widget="image"/>
+				<field name="gross_profit" readonly="True" groups="mgm.mgm_group_sales"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="view_users_form_preferences_inherit" model="ir.ui.view">
+		<field name="name">view.users.form.preferences.inherit</field>
+		<field name="model">res.users</field>
+		<field name="inherit_id" ref="mail_bot.res_users_view_form_preferences"/>
+		<field name="arch" type="xml">
+			<data>
+				<field name="signature" position="after">
+					<field name="gross_profit" readonly="True" groups="mgm.mgm_group_sales"/>
+				</field>
+			</data>
+		</field>
+	</record>
+</odoo>

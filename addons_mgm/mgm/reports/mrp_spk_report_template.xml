@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="spk_layout">
+		<t t-name="spk_layout">
+			<data>
+				<style>
+					.mgm_table{
+					margin-top: 5px;
+					border: 1px solid black;
+					width:100%;
+					border-collapse: collapse;
+					}
+					.mgm_table th td{
+					border: 1px solid black;
+					padding: 0px 5px 0px 5px;
+					}
+				</style>
+				<div t-if="not doc.image or not user.has_group('mgm.mgm_group_ppic') or user.id != doc.user_id.id" width="100%">
+					<div width="100%" style="position:absolute;opacity:0.2;transform:rotate(70deg);-webkit-transform:rotate(335deg);width:90%;text-align:center;top:165px;color:red;z-index: 2001;">
+						<p style="font-size:170px;">INVALID</p>
+					</div>
+				</div>
+				<div style="position: absolute; top: 157px; left: 425px; height: 300px; width: 530px; z-index: 2000;" align="center">
+					<t t-if="doc.image">
+						<img t-att-src="image_data_uri(doc.image)" style="max-width: 530px;max-height: 270px"/>
+					</t>
+					<t t-else="">
+						<img src="/mgm/static/img/no_image.png" style="width: 180px;height: 180px; opacity: 0.2; margin-top:50px"/>
+						<br/>
+						<p style="opacity: 0.2">No  Image Available</p>
+					</t>
+				</div>
+				<div style="font-size: 0.7rem;z-index:0" class="page" width="100%">
+					<table style="border: 1px solid black;text-align:center;" width="100%" class="mgm_table;page-break-inside: avoid;">
+						<tr rowspan="2">
+							<th style="border: 1px solid black;width:20%;vertical-align: middle;" rowspan="4">
+								<img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+							</th>
+							<th style="border: 1px solid black;width:50%;vertical-align: middle;font-size:13px" rowspan="2">FORM</th>
+							<td style="border: 1px solid black;width:10%;text-align:left;font-size:8px;padding-left: 5px">No. Dokumen</td>
+							<td style="border: 1px solid black;font-size:8px; padding-left: 5px">
+								<span t-field="doc.name"/>
+							</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;width:10%;text-align:left;font-size:8px; padding-left: 5px">Tanggal Berlaku</td>
+							<td style="border: 1px solid black;font-size:8px; padding-left: 5px">
+								<span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+							</td>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black;width:50%;vertical-align: middle;font-size:13px" rowspan="2">WORK ORDER</th>
+							<td style="border: 1px solid black;width:10%;text-align:left;font-size:8px; padding-left: 5px">Revisi Ke-</td>
+							<td style="border: 1px solid black;font-size:8px; padding-left: 5px">
+								<t t-if="doc.revision != 0">
+									<t t-set="revision" t-value="doc.revision - 1"/>
+									<span t-esc="revision"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;width:10%;text-align:left;font-size:8px; padding-left: 5px">Halaman</td>
+							<td style="border: 1px solid black;font-size:8px; padding-left: 5px">1 of 1</td>
+						</tr>
+					</table>
+
+					<br/>
+
+					<table style="border: 1px solid black;text-align:left;" class="mgm_table;page-break-inside: avoid;" width="100%">
+						<tr>
+							<th style="border: 1px solid black;padding-left: 5px" colspan="2">Model Name</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<span t-field="doc.sale_id.partner_id.name"/>
+							</th>
+							<td style="border: 1px solid black;width:10%; padding-left: 5px" colspan="1"/>
+							<td style="border: 1px solid black; padding-left: 5px">Process</td>
+							<td style="border: 1px solid black; padding-left: 5px;" colspan="4">
+								<span t-field="doc.description"/>
+							</td>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Order No.</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<span t-field="doc.origin"/>
+							</th>
+							<td style="border: 1px solid black;width:20%; padding-left: 5px" colspan="2"/>
+							<td style="border: 1px solid black; padding-left: 5px;" colspan="4" rowspan="2">
+								<!--								<t t-if="doc.notes != 'None'">-->
+								<!--									<span t-field="doc.notes"/>-->
+								<!--								</t>-->
+							</td>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Release Date</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+							</th>
+							<td style="border: 1px solid black;width:20%; padding-left: 5px" colspan="2"/>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">FP Date</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<span t-field="doc.date_deadline" t-options="{&quot;widget&quot;: &quot;date&quot;, &quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+							</th>
+							<td style="border: 1px solid black;text-align:center;font-size:10px; padding-left: 5px" colspan="6">DRAWING &amp; REMARK</td>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px" colspan="2">Ship Date</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<span t-field="doc.shipping_date" t-options="{&quot;widget&quot;: &quot;date&quot;, &quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+							</th>
+							<td style="border: 1px solid black;text-align:center;vertical-align: middle; padding-left: 5px;" colspan="6" rowspan="15" align="center">
+							</td>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Sched ID</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.sched_id">
+									<span t-field="doc.sched_id"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Unit ID</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.unit_id">
+									<span t-field="doc.unit_id"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">KOG</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.kog">
+									<span t-field="doc.kog"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">KOFG</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<span t-field="doc.routing_id.name"/>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black;height:100px; padding-left: 5px" colspan="2"/>
+							<th style="border: 1px solid black;height:100px; padding-left: 5px" colspan="3"/>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px; font-size:10px" colspan="2">Finished Goods</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">W</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">H</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">Qty</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2"/>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">
+								<span t-field="doc.width"/>
+							</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">
+								<span t-field="doc.height"/>
+							</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">
+								<span t-esc="&quot;%.0f&quot; % doc.product_qty"/>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Tolerance</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">+0/-2</th>
+							<th style="border: 1px solid black;text-align:center; padding-left: 5px;">+0/-2</th>
+							<th style="text-align:center; padding-left: 5px;"/>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Marking</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.marking">
+									<span t-field="doc.marking"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Mal</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.mal">
+									<span t-field="doc.mal"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Shape</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.shape">
+									<span t-field="doc.shape"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">Order Comment</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.comment">
+									<span t-field="doc.comment"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="2">PACKING</th>
+							<th style="border: 1px solid black;width:30%; padding-left: 5px" colspan="3">
+								<t t-if="doc.packing">
+									<span t-field="doc.packing"/>
+								</t>
+								<t t-else="">
+									-
+								</t>
+							</th>
+						</tr>
+					</table>
+
+					<br/>
+
+					<table style="border: 1px solid black;text-align:center;table-layout:fixed" class="mgm_table;page-break-inside: avoid;" width="100%">
+						<tr>
+							<td colspan="10" rowspan="3" style="border: 1px solid black;width:90%;text-align:left;vertical-align:middle; padding-left: 5px">
+								<dt class="font-italic">
+									NOTE :  1. Tolong dilengkapi dengan paraf, Nama dan beri tanggal proses pada kolom yang sudah di sediakan</dt>
+								<dd class="font-italic" style="text-indent: 0.36in">2. Jika terjadi Reject, buatlah keterangan yang jelas</dd>
+								<dd class="font-italic" style="text-indent: 0.36in">3. Bila ada ketidakjelasan Work Order, harap hubungi PPIC</dd>
+							</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Disetujui Oleh,</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;height: 40px; vertical-align: middle; padding-left: 5px" align="center">
+								<t t-if="doc.image">
+									<t t-if="user.has_group('mgm.mgm_group_ppic') and user.id == doc.user_id.id" class="mt32 ml64 mr4" name="signature">
+										<t t-if="user.signature">
+											<img t-att-src="image_data_uri(user.signature)" style="max-height: 1cm; max-width: 1cm;"/>
+										</t>
+									</t>
+								</t>
+							</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black; padding-left: 5px">Ka. PPIC</td>
+						</tr>
+						<tr>
+							<th style="border: 1px solid black; padding-left: 5px;" colspan="11">PROSES MESIN</th>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black; padding-left: 5px;">Cutting</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Lifeng</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Washing</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Glass Man</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Glass Full</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Cutting Manual</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Tempered</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Laminate</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Amandement</td>
+							<td style="border: 1px solid black; padding-left: 5px;">RO</td>
+							<td style="border: 1px solid black; padding-left: 5px;">Keterangan</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+							<td style="border: 1px solid black;height:15px"/>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;text-align:left;height:15px; padding-left: 5px">Tgl.</td>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+							<td style="border: 1px solid black;"/>
+						</tr>
+						<tr>
+							<td colspan="11" style="border: 1px solid black;height:5px"/>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black; padding-left: 5px;" colspan="4">Final Quality</td>
+							<td style="border: 1px solid black; padding-left: 5px;" colspan="7"/>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;height:15px" colspan="2"/>
+							<td style="border: 1px solid black;height:15px" colspan="2"/>
+							<td style="border: 1px solid black;height:15px" colspan="7"/>
+						</tr>
+					</table>
+				</div>
+			</data>
+		</t>
+	</template>
+
+	<template id="spk_report">
+		<t t-name="studio_main_report">
+			<t t-call="web.basic_layout">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="mgm.spk_layout"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

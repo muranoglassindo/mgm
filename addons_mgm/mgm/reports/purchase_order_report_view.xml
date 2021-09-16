@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+<!--		PO-->
+		<record id="paperformat_report_po" model="report.paperformat">
+			<field name="name">Format Report Purchase Order</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">30</field>
+			<field name="margin_bottom">20</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">20</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="purchase.action_report_purchase_order"
+				model="purchase.order"
+				string="Purchase Order"
+				report_type="qweb-pdf"
+				name="mgm.report_po"
+				file="mgm.report_po"
+				print_report_name="'PO - %s' % (object.name)"
+				paperformat="mgm.paperformat_report_po"
+		/>
+
+<!--		RFQ-->
+		<record id="paperformat_report_rfq" model="report.paperformat">
+			<field name="name">Format Report RFQ</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">30</field>
+			<field name="margin_bottom">20</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">20</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="purchase.report_purchase_quotation"
+				model="purchase.order"
+				string="Request for Quotation"
+				report_type="qweb-pdf"
+				name="mgm.report_rfq"
+				file="mgm.report_rfq"
+				print_report_name="'RFQ - %s' % (object.name)"
+				paperformat="mgm.paperformat_report_rfq"
+		/>
+
+	</data>
+</odoo>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!-- Menu Retail-->
+
+	<record id="sale.action_orders" model="ir.actions.act_window">
+		<field name="view_ids" eval="[(5, 0, 0),
+			(0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_order_tree')}),
+			(0, 0, {'view_mode': 'kanban', 'view_id': ref('sale.view_sale_order_kanban')}),
+			(0, 0, {'view_mode': 'form', 'view_id': ref('mgm.view_order_form_inherit')}),
+			(0, 0, {'view_mode': 'calendar', 'view_id': ref('sale.view_sale_order_calendar')}),
+			(0, 0, {'view_mode': 'pivot', 'view_id': ref('sale.view_sale_order_pivot')}),
+			(0, 0, {'view_mode': 'graph', 'view_id': ref('sale.view_sale_order_graph')})]"/>
+		<field name="search_view_id" ref="sale_order_view_search_inherit_sale_mgm"/>
+		<field name="search_view_id" ref="sale_order_view_search_inherit_sale_mgm"/>
+		<field name="context">{'search_default_group_state': 1,'search_default_order_month': 1}</field>
+		<field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')),('so_type','=','retail')]</field>
+	</record>
+
+	<record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+		<field name="view_ids" eval="[(5, 0, 0),
+			(0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_order_tree')}),
+			(0, 0, {'view_mode': 'kanban', 'view_id': ref('sale.view_sale_order_kanban')}),
+			(0, 0, {'view_mode': 'form', 'view_id': ref('mgm.view_order_form_inherit')}),
+			(0, 0, {'view_mode': 'calendar', 'view_id': ref('sale.view_sale_order_calendar')}),
+			(0, 0, {'view_mode': 'pivot', 'view_id': ref('sale.view_sale_order_pivot')}),
+			(0, 0, {'view_mode': 'graph', 'view_id': ref('sale.view_sale_order_graph')})]"/>
+		<field name="search_view_id" ref="sale_order_view_search_inherit_quotation_mgm"/>
+		<field name="context">{'search_default_group_state': 1,'search_default_order_month': 1}</field>
+		<field name="domain">[('so_type','=','retail')]</field>
+	</record>
+
+	<record model="ir.ui.menu" id="sale.sale_order_menu">
+		<field name="name">Orders Retail</field>
+		<field name="groups_id" eval="[(4, ref('mgm.mgm_group_sales_retail'))]"/>
+	</record>
+
+	<!-- Menu Project-->
+
+	<!-- Action Quotation-->
+	<record id="action_quotations_with_onboarding_project" model="ir.actions.act_window">
+		<field name="name">Quotations</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">sale.order</field>
+		<field name="view_id" ref="sale.view_quotation_tree_with_onboarding"/>
+		<field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+		<field name="view_ids" eval="[(5, 0, 0),
+			(0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_order_tree')}),
+			(0, 0, {'view_mode': 'kanban', 'view_id': ref('sale.view_sale_order_kanban')}),
+			(0, 0, {'view_mode': 'form', 'view_id': ref('mgm.view_order_form_project_inherit')}),
+			(0, 0, {'view_mode': 'calendar', 'view_id': ref('sale.view_sale_order_calendar')}),
+			(0, 0, {'view_mode': 'pivot', 'view_id': ref('sale.view_sale_order_pivot')}),
+			(0, 0, {'view_mode': 'graph', 'view_id': ref('sale.view_sale_order_graph')})]"/>
+		<field name="search_view_id" ref="sale_order_view_search_inherit_quotation_mgm"/>
+		<field name="context">{'search_default_group_state': 1,'search_default_order_month': 1}</field>
+		<field name="domain">[('so_type','=','project')]</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new quotation, the first step of a new sale!
+			</p><p>
+			Once the quotation is confirmed by the customer, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+		</p>
+		</field>
+	</record>
+
+	<!-- Action Orders-->
+	<record id="action_orders_project" model="ir.actions.act_window">
+		<field name="name">Sales Orders</field>
+		<field name="type">ir.actions.act_window</field>
+		<field name="res_model">sale.order</field>
+		<field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+		<field name="view_ids" eval="[(5, 0, 0),
+			(0, 0, {'view_mode': 'tree', 'view_id': ref('sale.view_order_tree')}),
+			(0, 0, {'view_mode': 'kanban', 'view_id': ref('sale.view_sale_order_kanban')}),
+			(0, 0, {'view_mode': 'form', 'view_id': ref('mgm.view_order_form_project_inherit')}),
+			(0, 0, {'view_mode': 'calendar', 'view_id': ref('sale.view_sale_order_calendar')}),
+			(0, 0, {'view_mode': 'pivot', 'view_id': ref('sale.view_sale_order_pivot')}),
+			(0, 0, {'view_mode': 'graph', 'view_id': ref('sale.view_sale_order_graph')})]"/>
+		<field name="search_view_id" ref="sale_order_view_search_inherit_sale_mgm"/>
+		<field name="context">{'search_default_group_state': 1,'search_default_order_month': 1}</field>
+		<field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')),('so_type','=','project')]</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new quotation, the first step of a new sale!
+			</p><p>
+			Once the quotation is confirmed, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+		</p>
+		</field>
+	</record>
+
+	<menuitem id="sale_order_menu_project"
+			name="Orders Project"
+			parent="sale.sale_menu_root"
+			groups="mgm.mgm_group_sales_project"
+			sequence="2"/>
+
+	<menuitem id="report_sales_team"
+			name="Sales Teams"
+			parent="sale_order_menu_project"
+			groups="sales_team.group_sale_manager"
+			action="sales_team.crm_team_salesteams_act"
+			sequence="3"/>
+
+	<menuitem id="menu_sale_quotations"
+			action="action_quotations_with_onboarding_project"
+			parent="sale_order_menu_project"
+			sequence="1" groups="sales_team.group_sale_salesman"/>
+
+	<menuitem id="menu_sale_order"
+			name="Orders"
+			action="action_orders_project"
+			parent="sale_order_menu_project"
+			sequence="2" groups="sales_team.group_sale_salesman"/>
+
+	<menuitem id="res_partner_menu"
+			parent="sale_order_menu_project"
+			action="account.res_partner_action_customer"
+			sequence="4" groups="sales_team.group_sale_salesman"/>
+
+<!--	Daily Reports-->
+	<record id="action_daily_report" model="ir.actions.act_window">
+		<field name="name">Daily Report</field>
+		<field name="res_model">daily.report</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new daily report!
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="sale_order_menu_daily_report"
+			name="Daily Reports"
+			parent="sale.menu_sale_report"
+			groups="mgm.mgm_group_sales_retail,mgm.mgm_group_director"
+			sequence="3"/>
+
+	<menuitem id="sale_order_menu_recap_daily_report"
+			name="Daily Reports"
+			action="mgm.action_daily_report"
+			parent="mgm.sale_order_menu_daily_report"/>
+
+	<record id="action_daily_report_download" model="ir.actions.act_window">
+		<field name="name">Download Daily Report</field>
+		<field name="res_model">daily.report.memory</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="mgm.download_daily_report_memory_form"/>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem id="sale_order_menu_download_daily_report"
+			name="Download Form Daily Reports"
+			action="mgm.action_daily_report_download"
+			parent="mgm.sale_order_menu_daily_report"
+			groups="mgm.mgm_group_sales"/>
+
+	<record id="action_daily_report_upload" model="ir.actions.act_window">
+		<field name="name">Upload Daily Report</field>
+		<field name="res_model">daily.report.memory</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="mgm.upload_daily_report_memory_form"/>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem id="sale_order_menu_upload_daily_report"
+			name="Upload Daily Reports"
+			action="mgm.action_daily_report_upload"
+			parent="mgm.sale_order_menu_daily_report"
+			groups="mgm.mgm_group_admin_sales"/>
+
+<!--	Leads Followup-->
+
+	<menuitem id="sale_order_menu_leads"
+			name="Leads Followup"
+			parent="sale.menu_sale_report"
+			groups="mgm.mgm_group_sales_project,mgm.mgm_group_director"
+			sequence="3"/>
+
+	<record id="action_followup_leads" model="ir.actions.act_window">
+		<field name="name">Followup Leads Project</field>
+		<field name="res_model">leads.project</field>
+		<field name="view_mode">tree,form</field>
+		<field name="view_ids" eval="[(5, 0, 0),
+			(0, 0, {'view_mode': 'tree', 'view_id': ref('mgm.leads_project_tree')}),
+			(0, 0, {'view_mode': 'form', 'view_id': ref('mgm.leads_project_form')})]"/>
+		<field name="search_view_id" ref="mgm.leads_project_search"/>
+		<field name="context">{'search_default_group_by_salesperson': 1,'search_default_group_by_month': 2,'search_default_group_by_state': 3}</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new Leads Project!
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="sale_order_menu_followup_leads"
+			name="Leads Followup Project"
+			action="mgm.action_followup_leads"
+			parent="mgm.sale_order_menu_leads"
+			groups="mgm.mgm_group_sales,mgm.mgm_group_director"/>
+
+	<record id="action_leads_download" model="ir.actions.act_window">
+		<field name="name">Download Leads Followup</field>
+		<field name="res_model">leads.followup.memory</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="mgm.download_leads_followup_memory_form"/>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem id="sale_order_menu_download_leads"
+			name="Download Form Leads Followup"
+			action="mgm.action_leads_download"
+			parent="mgm.sale_order_menu_leads"
+			groups="mgm.mgm_group_admin_sales"/>
+
+	<record id="action_leads_upload" model="ir.actions.act_window">
+		<field name="name">Upload Leads Followup</field>
+		<field name="res_model">leads.followup.memory</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="mgm.upload_leads_followup_memory_form"/>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem id="sale_order_menu_upload_leads"
+			name="Upload Leads Followup"
+			action="mgm.action_leads_upload"
+			parent="mgm.sale_order_menu_leads"
+			groups="mgm.mgm_group_admin_sales"/>
+
+<!--	Customer Complain-->
+
+	<record id="action_customer_complain" model="ir.actions.act_window">
+		<field name="name">Customer Complain</field>
+		<field name="res_model">customer.complain</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				Create a new Customer Complain!
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="sale_order_menu_customer_complain"
+			name="Customer Complain"
+			action="mgm.action_customer_complain"
+			parent="sale.menu_sale_report"
+			sequence="4"/>
+</odoo>

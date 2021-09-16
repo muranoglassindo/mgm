@@ -1,0 +1,86 @@
+<odoo>
+	<data>
+
+
+		<record id="module_mgm_category" model="ir.module.category">
+			<field name="name">User Authority</field>
+			<field name="sequence">20</field>
+		</record>
+		<record id="mgm_group_director" model="res.groups">
+			<field name="name">Director</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_sales" model="res.groups">
+			<field name="name">Sales</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_admin_sales" model="res.groups">
+			<field name="name">Admin Sales</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('mgm.mgm_group_sales'))]"/>
+		</record>
+		<record id="mgm_group_hr_admin" model="res.groups">
+			<field name="name">HR Admin Sales</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('mgm.mgm_group_admin_sales'))]"/>
+		</record>
+		<record id="mgm_group_manager_sales" model="res.groups">
+			<field name="name">Manager Sales</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('mgm.mgm_group_hr_admin'))]"/>
+		</record>
+		<record id="mgm_group_fat" model="res.groups">
+			<field name="name">Staff AR</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_manager_fat" model="res.groups">
+			<field name="name">Manager FAT</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('mgm.mgm_group_fat'))]"/>
+		</record>
+		<record id="mgm_group_ppic" model="res.groups">
+			<field name="name">PPIC</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_legal" model="res.groups">
+			<field name="name">Legal</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_purchase" model="res.groups">
+			<field name="name">Purchase</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_logistic" model="res.groups">
+			<field name="name">Logistic</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_production" model="res.groups">
+			<field name="name">Production</field>
+			<field name="category_id" ref="module_mgm_category"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+
+
+		<record id="module_mgm_category_sales" model="ir.module.category">
+			<field name="name">Sales Type</field>
+			<field name="sequence">30</field>
+		</record>
+		<record id="mgm_group_sales_retail" model="res.groups">
+			<field name="name">Retail</field>
+			<field name="category_id" ref="module_mgm_category_sales"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+		<record id="mgm_group_sales_project" model="res.groups">
+			<field name="name">Project</field>
+			<field name="category_id" ref="module_mgm_category_sales"/>
+			<field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+		</record>
+	</data>
+</odoo>

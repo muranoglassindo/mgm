@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+<!--		SQ/SO-->
+
+		<record id="paperformat_report_sale_order" model="report.paperformat">
+			<field name="name">Format Report Sale Order</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Landscape</field>
+			<field name="margin_top">10</field>
+			<field name="margin_bottom">10</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">5</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="sale.action_report_saleorder"
+				string="SQ/SO Internal"
+				model="sale.order"
+				report_type="qweb-pdf"
+				file="mgm.report_saleorder"
+				paperformat="mgm.paperformat_report_sale_order"
+				name="mgm.report_saleorder"
+				print_report_name="('%s' % (object.name))"
+		/>
+
+		<report
+				id="action_report_saleorder_external"
+				string="SQ/SO External"
+				model="sale.order"
+				report_type="qweb-pdf"
+				file="mgm.report_saleorder_external"
+				paperformat="mgm.paperformat_report_sale_order"
+				name="mgm.report_saleorder_external"
+				print_report_name="('External - %s' % (object.name))"
+		/>
+
+<!--		Order Image-->
+
+		<record id="paperformat_order_image" model="report.paperformat">
+			<field name="name">Format Order Image</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">20</field>
+			<field name="margin_bottom">10</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">10</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="form_order_image_template"
+				model="sale.order"
+				string="Order Image"
+				report_type="qweb-pdf"
+				name="mgm.order_image_template"
+				file="mgm.order_image_template"
+				print_report_name="'Order Image - %s' % (object.name)"
+				paperformat="mgm.paperformat_order_image"
+				groups="mgm.mgm_group_sales_retail,mgm.mgm_group_sales_project"
+		/>
+
+<!--		Customer Complain-->
+
+		<record id="paperformat_customer_complain" model="report.paperformat">
+			<field name="name">Format Customer Complain</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">20</field>
+			<field name="margin_bottom">10</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">10</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="customer_complain"
+				model="sale.order"
+				string="Customer Complain"
+				report_type="qweb-pdf"
+				name="mgm.customer_complain"
+				file="mgm.customer_complain"
+				print_report_name="'Customer Complain - %s' % (object.name)"
+				paperformat="mgm.paperformat_customer_complain"
+		/>
+
+<!--		Daily Report-->
+
+		<record id="paperformat_daily_report" model="report.paperformat">
+			<field name="name">Format Daily Report</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">10</field>
+			<field name="margin_bottom">10</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">10</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="daily_report_sales"
+				model="sale.order"
+				string="Form Daily Report Sales"
+				report_type="qweb-pdf"
+				name="mgm.daily_report"
+				file="mgm.daily_report"
+				print_report_name="'Daily Report'"
+				paperformat="mgm.paperformat_daily_report"
+				menu="False"
+		/>
+
+		<report
+				id="daily_report_sales_xlsx"
+				model="sale.order"
+				string="Form Daily Report Sales"
+				report_type="xlsx"
+				name="mgm.daily_report_xlsx"
+				file="mgm.daily_report_xlsx"
+				print_report_name="(object._get_daily_report_filename())"
+				attachment_use="False"
+				menu="False"
+		/>
+
+<!--		Leads Followup-->
+		<report
+				id="leads_followup_sales_xlsx"
+				model="leads.project"
+				string="Form Leads Followup Sales Project"
+				report_type="xlsx"
+				name="mgm.leads_followup_xlsx"
+				file="mgm.leads_followup_xlsx"
+				print_report_name="(object._get_leads_report_filename())"
+				attachment_use="False"
+				menu="False"
+		/>
+<!--		Internal Memo-->
+
+		<record id="paperformat_im" model="report.paperformat">
+			<field name="name">Format Internal Memo</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">20</field>
+			<field name="margin_bottom">25</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">15</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="internal_memo_sale"
+				model="sale.order"
+				string="Internal Memo"
+				report_type="qweb-pdf"
+				name="mgm.internal_memo"
+				file="mgm.internal_memo"
+				print_report_name="'Internal Memo - %s' % (object.name)"
+				paperformat="mgm.paperformat_im"
+				groups="mgm.mgm_group_sales_retail"
+		/>
+	</data>
+</odoo>

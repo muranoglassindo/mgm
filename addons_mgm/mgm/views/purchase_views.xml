@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="purchase_order_form_inherit" model="ir.ui.view">
+		<field name="name">purchase.order.form.inherit</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//header/button[@name='button_confirm'][1]" position="replace">
+			</xpath>
+			<xpath expr="//header/button[@name='print_quotation'][1]" position="attributes">
+				<attribute name="groups">mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='print_quotation'][2]" position="attributes">
+				<attribute name="groups">mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_rfq_send'][1]" position="attributes">
+				<attribute name="groups">mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_rfq_send'][2]" position="attributes">
+				<attribute name="groups">mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='button_confirm']" position="replace">
+				<button name="button_confirm" id="action_validate_director"
+						string="Approve" type="object" groups="mgm.mgm_group_director"
+						style="background-color: #4CAF50; color: white" class="oe_read_only" states="director"/>
+			</xpath>
+			<xpath expr="//header/button[@name='button_cancel']" position="attributes">
+				<attribute name="style">background-color: red; color: white</attribute>
+				<attribute name="class">oe_read_only</attribute>
+				<attribute name="states">director,purchase</attribute>
+				<attribute name="groups">mgm.mgm_group_director</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='print_quotation']" position="after">
+				<button name="action_validate" id="action_validate_purchase"
+						string="Approve" type="object" groups="mgm.mgm_group_purchase"
+						style="background-color: #4CAF50; color: white" states="draft,to approve,sent" class="oe_read_only"/>
+			</xpath>
+			<xpath expr="//header/button[@name='button_cancel']" position="before">
+				<button name="button_cancel" states="draft,to approve,sent,purchase" string="Cancel" type="object" class="oe_read_only" style="background-color: red; color: white" groups="mgm.mgm_group_purchase"/>
+			</xpath>
+			<xpath expr="//header/field[@name='state']" position="replace">
+				<field name="state" widget="statusbar" statusbar_visible="draft,sent,director,purchase" readonly="1"/>
+			</xpath>
+			<xpath expr="//header/button[@name='button_draft']" position="attributes">
+				<attribute name="groups">mgm.mgm_group_director,mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_view_invoice'][1]" position="attributes">
+				<attribute name="groups">mgm.mgm_group_director,mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_view_invoice'][2]" position="attributes">
+				<attribute name="groups">mgm.mgm_group_director,mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<xpath expr="//header/button[@name='action_view_picking']" position="attributes">
+				<attribute name="groups">mgm.mgm_group_director,mgm.mgm_group_purchase</attribute>
+			</xpath>
+			<field name="partner_ref" position="before">
+				<field name="quotation_vendor_file_name" invisible="1"/>
+				<field name="quotation_vendor" widget="binary" filename="quotation_vendor_file_name"/>
+			</field>
+			<field name="date_order" position="after">
+				<field name="sppkp" readonly="True"/>
+			</field>
+			<field name="payment_term_id" position="after">
+				<field name="payment_term_name" invisible="1"/>
+				<field name="period" attrs="{'invisible': [('payment_term_name','!=','Tempo')],'required': [('payment_term_name','=','Tempo')],'readonly':[('state','not in',['draft','sent','to approve'])]}"/>
+			</field>
+			<xpath expr="//sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">
+				<field name="width"/>
+				<field name="height"/>
+				<field name="thick" readonly="True"/>
+			</xpath>
+			<xpath expr="//sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_qty']" position="after">
+				<field name="area" readonly="True"/>
+			</xpath>
+		</field>
+	</record>
+</odoo>

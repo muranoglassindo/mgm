@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<odoo>
+	<template id="barcode_fg">
+		<t t-name="mrp.report_simple_barcode_fg">
+			<t t-call="web.basic_layout">
+				<div style="font-size: 16px;" class="page">
+					<t t-foreach="docs" t-as="doc">
+						<t t-if="doc.finished_move_line_ids">
+							<t t-foreach="doc.finished_move_line_ids" t-as="product">
+								<table class="table" style="margin-top:0px;width:635px;">
+									<tr>
+										<th class="text-left" style="padding:0;width:317px;vertical-align: middle;" rowspan="2">
+											<img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height:60px;" alt="Company Logo"/>
+										</th>
+										<th style="padding:0;text-align:right">
+											<span t-field="doc.name"/>
+										</th>
+									</tr>
+									<tr>
+										<th style="padding:0;text-align:right">
+											<span t-field="doc.origin"/>
+										</th>
+									</tr>
+								</table>
+
+								<table class="table" style="margin-top:0px;width:635px;page-break-after: always">
+									<tr>
+										<th style="padding:0;text-align:center;font-size: 18px;" colspan="2">
+											<span t-field="doc.sale_id.partner_id.name"/>
+										</th>
+									</tr>
+									<tr>
+										<th style="padding:0;text-align:left;width:635px">
+											<span t-field="doc.product_id.display_name"/>
+										</th>
+										<th style="padding:0;text-align:right">
+											Qty: <span t-esc="&quot;%.0f&quot; % doc.product_qty"/>
+										</th>
+									</tr>
+									<tr>
+										<t t-set="area" t-value="doc.get_area_per_pcs()"/>
+										<th style="padding:0;text-align:center" colspan="2">
+											<span><span t-field="doc.height"/>mm x <span t-field="doc.width"/>mm ( <t t-esc="&quot;%.2f&quot; % area"/> m<sup>2</sup>)</span>
+										</th>
+									</tr>
+									<tr>
+										<th style="padding:0;text-align:left;width:317px">
+											S: <span t-field="doc.date_planned_start" t-options="{&quot;widget&quot;: &quot;date&quot;, &quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+										</th>
+										<th style="padding:0;text-align:right;width:317px">
+											D: <span t-field="doc.date_deadline" t-options="{&quot;widget&quot;: &quot;date&quot;, &quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+										</th>
+									</tr>
+									<tr>
+										<td class="text-center align-middle" colspan="2">
+											<t t-if="product.lot_id">
+												<img alt="Barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.lot_id.name, 600, 150)" style="width:605px;height:113px"/>
+											</t>
+											<t t-else="">
+												<span class="text-muted">No barcode available<br/>This product does not have a serial number</span>
+											</t>
+										</td>
+									</tr>
+								</table>
+							</t>
+						</t>
+
+						<t t-else="">
+							<table class="table" style="margin-top:0px;width:635px;">
+								<tr>
+									<th class="text-left" style="padding:0;width:317px;vertical-align: middle;" rowspan="2">
+										<img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height:60px;" alt="Company Logo"/>
+									</th>
+									<th style="padding:0;text-align:right">
+										<span t-field="doc.name"/>
+									</th>
+								</tr>
+								<tr>
+									<th style="padding:0;text-align:right">
+										<span t-field="doc.origin"/>
+									</th>
+								</tr>
+							</table>
+
+							<table class="table" style="margin-top:0px;width:635px;page-break-after: always">
+								<tr>
+									<th style="padding:0;text-align:center;font-size: 18px;" colspan="2">
+										<span t-field="doc.sale_id.partner_id.name"/>
+									</th>
+								</tr>
+								<tr>
+									<th style="padding:0;text-align:left;width:540px">
+										<span t-field="doc.product_id.display_name"/>
+									</th>
+									<th style="padding:0;text-align:right">
+										Qty: <span t-esc="&quot;%.0f&quot; % doc.product_qty"/>
+									</th>
+								</tr>
+								<tr>
+									<t t-set="area" t-value="doc.get_area_per_pcs()"/>
+									<th style="padding:0;text-align:center" colspan="2">
+										<span><span t-field="doc.height"/>mm x <span t-field="doc.width"/>mm ( <t t-esc="&quot;%.2f&quot; % area"/> m<sup>2</sup>)</span>
+									</th>
+								</tr>
+								<tr>
+									<th style="padding:0;text-align:left;width:317px">
+										S: <span t-field="doc.date_planned_start" t-options="{&quot;widget&quot;: &quot;date&quot;, &quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+									</th>
+									<th style="padding:0;text-align:right;width:317px">
+										D: <span t-field="doc.date_planned_finished" t-options="{&quot;widget&quot;: &quot;date&quot;, &quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/>
+									</th>
+								</tr>
+								<tr>
+									<td class="text-center align-middle" colspan="2">
+										<span class="text-muted">No barcode available<br/>This product does not have a serial number</span>
+									</td>
+								</tr>
+							</table>
+						</t>
+					</t>
+				</div>
+			</t>
+		</t>
+	</template>
+</odoo>

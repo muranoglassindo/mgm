@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="paperformat_report_inv" model="report.paperformat">
+			<field name="name">Format Report Invoice</field>
+			<field name="default" eval="False"/>
+			<field name="format">A4</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">5</field>
+			<field name="margin_bottom">5</field>
+			<field name="margin_left">10</field>
+			<field name="margin_right">10</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">35</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				id="account_invoices"
+				model="account.move"
+				string="Invoices"
+				report_type="qweb-pdf"
+				name="mgm.report_invoice"
+				file="mgm.report_invoice"
+				print_report_name="'INV - %s'%(object._get_report_base_filename())"
+				paperformat="mgm.paperformat_report_inv"
+		/>
+
+<!--		Hide yang asli-->
+		<report
+				id="account.account_invoices"
+				model="account.move"
+				string="Invoices"
+				report_type="qweb-pdf"
+				name="account.report_invoice_with_payments"
+				file="account.report_invoice_with_payments"
+				attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+				print_report_name="(object._get_report_base_filename())"
+				groups="account.group_account_invoice"
+				menu="False"
+		/>
+
+		<report
+				id="account.account_invoices_without_payment"
+				model="account.move"
+				string="Invoices without Payment"
+				report_type="qweb-pdf"
+				name="account.report_invoice"
+				file="account.report_invoice"
+				attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+				print_report_name="(object._get_report_base_filename())"
+				menu="False"
+		/>
+
+	</data>
+</odoo>

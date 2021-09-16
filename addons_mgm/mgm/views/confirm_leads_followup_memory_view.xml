@@ -1,0 +1,22 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="confirm_leads_memory_form">
+			<field name="name">confirm.leads.memory.form</field>
+			<field name="model">confirm.leads.memory</field>
+			<field name="arch" type="xml">
+				<form>
+					<label for="followup" string="Information: "/><p/>
+					<field name="followup" placeholder="Compro via WhatsApp kepada Bpk.A" style="font-size: 12px"/>
+					<label for="status" string="Status: "/><p/>
+					<field name="status"/>
+					<footer>
+						<button string="Proceed" type="object" name="action_confirm" class="oe_highlight"/>
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

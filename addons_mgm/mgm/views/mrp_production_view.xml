@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<!-- Manufacturing Order -->
+		<record id="mrp_production_tree_view_inherit" model="ir.ui.view">
+			<field name="name">mrp.production.tree.inherit</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//tree" position="attributes">
+					<attribute name="default_order">date_planned_start asc</attribute>
+				</xpath>
+				<xpath expr="//field[@name='product_id']" position="before">
+					<field name="sale_id" string="Source"/>
+					<field name="admin_sales" readonly="True"/>
+				</xpath>
+				<xpath expr="//field[@name='product_id']" position="after">
+					<field name="width"/>
+					<field name="height"/>
+					<field name="area"/>
+				</xpath>
+				<xpath expr="//field[@name='origin']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="mrp_production_form_view_inherit" model="ir.ui.view">
+			<field name="name">mrp.production.form.inherit</field>
+			<field name="model">mrp.production</field>
+			<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//header/button[@name='action_assign']" position="attributes">
+					<attribute name="groups">mgm.mgm_group_ppic</attribute>
+				</xpath>
+				<xpath expr="//header/button[@name='button_plan']" position="attributes">
+					<attribute name="groups">mgm.mgm_group_ppic</attribute>
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='product_id']" position="after">
+					<field name="width" readonly="True"/>
+					<field name="height" readonly="True"/>
+					<field name="area" readonly="True"/>
+				</xpath>
+				<xpath expr="//sheet/group/group[2]/field[@name='date_deadline']" position="after">
+					<field name="shipping_date"/>
+				</xpath>
+				<xpath expr="//sheet/group/group[2]/field[@name='origin']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+				<xpath expr="//sheet/group/group[2]/field[@name='origin']" position="after">
+					<field name="sale_id" readonly="True"/>
+					<field name="sales_id" readonly="True"/>
+					<field name="admin_sales" readonly="True"/>
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='routing_id']" position="after">
+					<field name="description" readonly="True"/>
+					<field name="notes"/>
+				</xpath>
+				<xpath expr="//sheet/notebook/page/field[@name='move_raw_ids']" position="after">
+					<group string="Additional Products">
+						<field name="additional_product_ids" nolabel="1">
+							<tree editable="bottom">
+								<field name="product_id"/>
+								<field name="product_qty"/>
+								<field name="consumed"/>
+							</tree>
+						</field>
+					</group>
+					<i style="color:red;font-size: 12px">
+						*ensure the availability of additional products before planning the production stage.
+					</i>
+				</xpath>
+				<xpath expr="//sheet/notebook/page[3]" position="after">
+					<page string="SPK">
+						<style>
+							.image_size > img {
+							max-height: 500px;
+							max-width: 500px;
+							}
+						</style>
+						<group>
+							<group string="Other Info">
+								<field name="sched_id"/>
+								<field name="unit_id"/>
+								<field name="kog"/>
+								<field name="marking"/>
+								<field name="mal"/>
+								<field name="shape"/>
+								<field name="comment"/>
+								<field name="packing"/>
+							</group>
+							<group string="Optimization">
+								<b>Image</b><br/>
+								<field name="image" nolabel="1" widget="image" class="image_size"/>
+							</group>
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_mrp_production_filter_inherit" model="ir.ui.view">
+			<field name="name">mrp.production.select.inherit</field>
+			<field name="model">mrp.production</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group" position="before">
+					<filter string="State" name="group_state" domain="[]" context="{'group_by': 'state'}"/>
+					<filter string="Admin Sales" name="group_admin_sales" domain="[]" context="{'group_by': 'admin_sales'}"/>
+					<filter string="Scheduled Date" name="scheduled_date_year" domain="[]" context="{'group_by': 'date_planned_start:year'}"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="mrp.mrp_production_action" model="ir.actions.act_window">
+			<field name="search_view_id" ref="view_mrp_production_filter_inherit"/>
+			<field name="context">{'search_default_group_admin_sales': 1, 'search_default_group_state': 4, 'search_default_scheduled_date_year': 2, 'search_default_scheduled_date': 3}</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="mrp.mrp_workorder_todo">
+			<field name="context">{'search_default_production': 1, 'search_default_ready': True, 'search_default_progress': True, 'search_default_pending': True}</field>
+		</record>
+	</data>
+</odoo>

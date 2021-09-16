@@ -1,0 +1,20 @@
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="cancel_sq_memory_form">
+			<field name="name">cancel.sq.memory.form</field>
+			<field name="model">cancel.sq.memory</field>
+			<field name="arch" type="xml">
+				<form>
+					<label for="reason" string="Reason For Cancellation :"/><p/>
+					<field name="reason" placeholder="Diskon pada produk A salah, diskon maksimal yang dapat diberikan sebesar 10%." style="font-size: 12px"/>
+					<footer>
+						<button string="Proceed" type="object" name="action_cancel_sq" class="oe_highlight"/>
+						<button string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

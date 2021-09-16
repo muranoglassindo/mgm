@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--	pengecekan status complain pelanggan, apabila sudah melewati due date maka state jd not yet-->
+<!--	TODO: gatau kenapa 00:05 jadi harus 16:05, apakah karena ke set otomatis UTC???-->
+	<data>
+		<record model="ir.cron" id="mgm_customer_complain">
+			<field name="name">Validate Customer Complain</field>
+			<field name="user_id" ref="base.user_root"/>
+			<field name="active" eval="True" />
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="numbercall">-1</field>
+			<field name="nextcall" eval="datetime.now(pytz.timezone('Asia/Jakarta')).strftime('%Y-%m-%d 17:05:00')" />
+			<field name="doall" eval="True"/>
+			<field name="model_id" ref="mgm.model_customer_complain"/>
+			<field name="state">code</field>
+			<field name="code">model.process_scheduler_queue()</field>
+		</record>
+	</data>
+
+<!--Reset Gross Profit untuk sales ketika cut off tgl 20.-->
+<!--	TODO: gatau kenapa 23:00 jadi harus 16:00, apakah karena ke set otomatis UTC???-->
+	<data>
+		<record model="ir.cron" id="mgm_gross_profit_sales">
+			<field name="name">Reset Gross Profit Sales</field>
+			<field name="user_id" ref="base.user_root"/>
+			<field name="active" eval="True" />
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="numbercall">-1</field>
+			<field name="nextcall" eval="datetime.now(pytz.timezone('Asia/Jakarta')).strftime('%Y-%m-%d 16:00:00')" />
+			<field name="doall" eval="True"/>
+			<field name="model_id" ref="mgm.model_res_users"/>
+			<field name="state">code</field>
+			<field name="code">model.reset_gross_profit()</field>
+		</record>
+	</data>
+
+<!--	Cron untuk mengecek followup leads dari sales project-->
+	<data>
+		<record model="ir.cron" id="mgm_leads_followup">
+			<field name="name">Check State Leads</field>
+			<field name="user_id" ref="base.user_root"/>
+			<field name="active" eval="True" />
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="numbercall">-1</field>
+			<field name="nextcall" eval="datetime.now(pytz.timezone('Asia/Jakarta')).strftime('%Y-%m-%d 17:00:01')" />
+			<field name="doall" eval="True"/>
+			<field name="model_id" ref="mgm.model_leads_project"/>
+			<field name="state">code</field>
+			<field name="code">model.check_due_date()</field>
+		</record>
+	</data>
+</odoo>

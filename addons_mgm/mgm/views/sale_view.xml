@@ -1,0 +1,619 @@
+<odoo>
+	<data>
+		<record id="view_sales_order_auto_done_setting_inherit" model="ir.ui.view">
+			<field name="name">sale.order.form</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_sales_order_auto_done_setting"/>
+			<field name="groups_id" eval="[(4, ref('sale.group_auto_done_setting'))]"/>
+			<field name="arch" type="xml">
+				<xpath expr="//button[@name='action_unlock']" position="attributes">
+					<attribute name="groups">mgm.mgm_group_fat</attribute>
+				</xpath>
+
+				<xpath expr="//button[@name='action_done']" position="attributes">
+					<attribute name="groups">mgm.mgm_group_fat</attribute>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_order_tree_inherit" model="ir.ui.view">
+			<field name="name">sale.order.tree.inherit</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+			<field name="arch" type="xml">
+				<xpath expr="//tree/field[@name='amount_total']" position="after">
+					<field name="margin"/>
+					<field name="gross_profit"/>
+					<field name="state"/>
+				</xpath>
+			</field>
+		</record>
+
+<!--		Sale Order-->
+		<record id="sale_order_view_search_inherit_sale_mgm" model="ir.ui.view">
+			<field name="name">sale.order.search.inherit.sale.mgm</field>
+			<field name="model">sale.order</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="sale.view_sales_order_filter"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group" position="before">
+					<filter string="State" name="group_state" domain="[]" context="{'group_by': 'state'}"/>
+				</xpath>
+			</field>
+		</record>
+
+<!--		Quotation-->
+		<record id="sale_order_view_search_inherit_quotation_mgm" model="ir.ui.view">
+			<field name="name">sale.order.search.inherit.quotation.mgm</field>
+			<field name="model">sale.order</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="sale.view_sales_order_filter"/>
+			<field name="arch" type="xml">
+				<xpath expr="//group" position="before">
+					<filter string="State" name="group_state" domain="[]" context="{'group_by': 'state'}"/>
+				</xpath>
+			</field>
+		</record>
+
+		<!--SALES ORDER Retail-->
+		<record id="view_order_form_inherit" model="ir.ui.view">
+			<field name="name">view.order.form.inherit</field>
+			<field name="model">sale.order</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+
+				<xpath expr="//header/field[@name='state']" position="replace">
+					<field name="state" widget="statusbar" statusbar_visible="draft,order,admin,manager,fat,fat2,ppic,sale"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_confirm']" position="after">
+					<button name="action_validate" id="action_validate_sales"
+						string="Validate" type="object" groups="mgm.mgm_group_sales"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['order'])]}"/>
+					<button name="action_validate" id="action_validate_admin"
+						string="validate" type="object" groups="mgm.mgm_group_admin_sales"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['admin'])]}"/>
+					<button name="action_validate" id="action_validate_manager"
+						string="Validate" type="object" groups="mgm.mgm_group_manager_sales"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['manager'])]}"/>
+					<button name="action_validate" id="action_validate_fat"
+						string="Validate" type="object" groups="mgm.mgm_group_fat"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['fat'])]}"/>
+					<button name="action_validate" id="action_validate_fat2"
+						string="Validate" type="object" groups="mgm.mgm_group_manager_fat"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['fat2'])]}"/>
+					<button name="action_confirm" id="action_validate_ppic"
+						string="Validate" type="object" groups="mgm.mgm_group_ppic"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['ppic'])]}"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_confirm'][1]" position="replace">
+					<button name="action_validate" id="action_validate_sales"
+							string="Confirm" type="object"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['draft'])]}" groups="mgm.mgm_group_sales"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_confirm'][2]" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_quotation_send']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_quotation_send'][4]" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_cancel']" position="replace">
+					<button name="action_cancel_sq" id="sales_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['order'])]}" groups="mgm.mgm_group_sales"/>
+					<button name="action_cancel_sq" id="admin_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['admin'])]}" groups="mgm.mgm_group_admin_sales"/>
+					<button name="action_cancel_sq" id="manager_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['manager'])]}" groups="mgm.mgm_group_manager_sales"/>
+					<button name="action_cancel_sq" id="ar_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['fat'])]}" groups="mgm.mgm_group_fat"/>
+					<button name="action_cancel_sq" id="manager_fat_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['fat2'])]}" groups="mgm.mgm_group_manager_fat"/>
+					<button name="action_cancel_sq" id="ppic_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['ppic'])]}" groups="mgm.mgm_group_ppic"/>
+					<button name="action_cancel_sq" id="approved_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['sale'])]}" groups="mgm.mgm_group_ppic"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_draft']" position="attributes">
+					<attribute name="groups">mgm.mgm_group_sales</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/div/button[@name='preview_sale_order']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='validity_date']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="attributes">
+					<attribute name="string">Payment Method</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="before">
+					<field name="commitment_date" readonly="False"/>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="after">
+					<field name="period" attrs="{'invisible': [('payment_term_name','!=','Tempo')],'required': [('payment_term_name','=','Tempo')],'readonly':[('state','not in',['draft','sent','order','admin'])]}"/>
+<!--					<label for="shipping_cost"/>-->
+<!--					<div>-->
+<!--						<field name="shipping_cost_type" attrs="{'readonly':[('state','not in',['draft','sent','order','admin'])]}" class="oe_inline" style="margin-right:5px;"/>-->
+<!--						<field name="shipping_cost" attrs="{'readonly':[('state','not in',['draft','sent','order','admin'])]}" class="oe_inline" style="margin-right:10px;"/>-->
+<!--						<t attrs="{'invisible': [('shipping_cost_type','=','rp')]}">=</t>-->
+<!--						<field name="amount_shipping_cost" attrs="{'invisible': [('shipping_cost_type','=','rp')],'readonly':[('state','not in',['draft','sent','order','admin'])]}" style="margin-left:10px;"/>-->
+<!--					</div>-->
+					<label for="down_payment" attrs="{'invisible': [('payment_term_name','not in',['DP - Cash Before Delivery','DP - Cash On Delivery','Tempo'])]}"/>
+					<div attrs="{'invisible': [('payment_term_name','not in',['DP - Cash Before Delivery','DP - Cash On Delivery','Tempo'])]}">
+						<field name="type_dp" class="oe_inline" attrs="{'readonly':[('state','not in',['draft','sent','order','admin'])]}"  style="margin-right:10px;"/>
+						<field name="down_payment" attrs="{'required': [('payment_term_name','in',['DP - Cash Before Delivery','DP - Cash On Delivery'])],'readonly':[('state','not in',['draft','sent','order','admin'])]}" class="oe_inline"/>
+					</div>
+					<field name="on_credit"/>
+<!--					<p style="color:red" attrs="{'invisible': ['|','|',('payment_term_name','!=','Tempo'),('on_credit', '=', False),('payment_term_id','=',False)]}">-->
+<!--						<b>-->
+<!--							<i>-->
+<!--								Check payment, signature and stamp on SQ/SO.-->
+<!--							</i>-->
+<!--						</b>-->
+<!--					</p>-->
+					<field name="so_type" invisible="True"/>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="attributes">
+					<attribute name="attrs">{'readonly': [('state','not in', ('draft','sent','order','admin'))]}</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='%(sale.action_view_sale_advance_payment_inv)d'][1]" position="attributes">
+					<attribute name="groups">mgm.mgm_group_fat</attribute>
+					<attribute name="attrs">{'invisible': [('state', 'not in', ['sale', 'done'])]}</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='%(sale.action_view_sale_advance_payment_inv)d'][2]" position="attributes">
+					<attribute name="groups">mgm.mgm_group_fat</attribute>
+					<attribute name="attrs">{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', 'not in', ['sale', 'done'])]}</attribute>
+				</xpath>
+
+<!--				<xpath expr="//sheet/notebook/page[@name='other_information']/group/group[@name='sales_person']/field[@name='user_id']" position="attributes">-->
+<!--					<attribute name="readonly">1</attribute>-->
+<!--				</xpath>-->
+
+				<xpath expr="//sheet/notebook/page[@name='other_information']" position="inside">
+					<group>
+						<group name="order_details" string="Order Details">
+							<field name="products" readonly="True"/>
+							<field name="services" readonly="True"/>
+							<field name="image_name" invisible="1"/>
+							<field name="image" widget="binary" filename="image_name"/>
+						</group>
+						<group name="payments" string="Payment Details">
+							<field name="proof_of_payment_ids" nolabel="1">
+								<tree editable="bottom">
+									<field name="proof_of_payment_name" invisible="1"/>
+									<field name="proof_of_payment" filename="proof_of_payment_name" widget="binary"/>
+								</tree>
+							</field>
+						</group>
+					</group>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='other_information']" position="after">
+					<page string="Requirements" name="customer_requirements" attrs="{'invisible': ['|',('payment_term_name','not in', ['Tempo']),('payment_term_id','=', False),]}">
+						<group>
+							<group string="Requirements">
+								<field name="is_person" invisible="1"/>
+								<field name="payment_term_name" invisible="1"/>
+								<field name="skdu_so_customer_file_name" invisible="1"/>
+								<field name="skdu_so_customer" widget="binary" filename="skdu_so_customer_file_name" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="npwp_so_customer_file_name" invisible="1"/>
+								<field name="npwp_so_customer" widget="binary" filename="npwp_so_customer_file_name" attrs="{'invisible': [('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="ktp_so_customer_file_name" invisible="1"/>
+								<field name="ktp_so_customer" widget="binary" filename="ktp_so_customer_file_name" attrs="{'invisible': [('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="siup_so_customer_file_name" invisible="1"/>
+								<field name="siup_so_customer" widget="binary" filename="siup_so_customer_file_name" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="mou_so_customer_file_name" invisible="1"/>
+								<field name="mou_so_customer" widget="binary" filename="mou_so_customer_file_name" attrs="{'invisible': ['|',('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery']),('period','&lt;', 30)]}"/>
+								<field name="memo_so_customer_file_name" invisible="1"/>
+								<field name="memo_so_customer" widget="binary" filename="memo_so_customer_file_name" attrs="{'invisible': ['|',('payment_term_name','not in', ['Tempo']),('period','&gt;=', 30)],'readonly':[('state','not in',['draft','sent','order','admin'])]}"/>
+							</group>
+							<group string="Validation" attrs="{'invisible': [('state','not in', ['admin','manager','fat','fat2','ppic'])]}">
+								<p style="color:red">
+									<b>
+										<i>
+											By checking the validation column below, you have verified the correctness of the data.
+										</i>
+									</b>
+								</p>
+								<field name="validate_skdu" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_npwp" attrs="{'invisible': [('payment_term_name', 'in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_ktp" attrs="{'invisible': [('payment_term_name', 'in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_siup" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_mou" attrs="{'invisible': ['|',('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery']),('period','&lt;', 30)]}"/>
+								<field name="validate_mi" attrs="{'invisible': ['|',('payment_term_name','not in', ['Tempo']),('period','&gt;=', 30)]}"/>
+							</group>
+						</group>
+					</page>
+					<page string="Cancellation" name="cancellation" attrs="{'invisible': [('reason_cancellation_ids','=', [])]}">
+						<group>
+							<field name="reason_cancellation_ids" nolabel="1" readonly="1">
+								<tree>
+									<field name="user_id"/>
+									<field name="reason"/>
+									<field name="state" string="State"/>
+									<field name="create_date" string="Date"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+					<page string="Complaint" name="complaint" attrs="{'invisible': [('customer_complain_ids','=', [])]}">
+						<group>
+							<field name="customer_complain_ids" nolabel="1" readonly="1">
+								<tree>
+									<field name="date"/>
+									<field name="report"/>
+									<field name="action"/>
+									<field name="pic"/>
+									<field name="due_date"/>
+									<field name="information"/>
+									<field name="state"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="before">
+					<field name="notes"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="before">
+					<field name="routing" readonly="True"/>
+					<field name="height"/>
+					<field name="width"/>
+					<field name="thick" readonly="True"/>
+					<field name="qty"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+					<attribute name="string">Description</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='name']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+					<field name="area"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+<!--					<field name="unit_price" readonly="False"/>-->
+					<field name="add_cost"/>
+<!--					TODO: kenapa bisa readonly??-->
+					<field name="total" readonly="False"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_subtotal']" position="replace">
+					<field name="disc_value" groups="product.group_discount_per_so_line" optional="show"/>
+					<field name="price_subtotal"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_untaxed']" position="replace">
+					<field name="amount_undisc"/>
+					<field name="amount_disc"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_tax']" position="before">
+					<field name="grand_total_after_disc"/>
+<!--					<field name="amount_shipping_cost"/>-->
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_tax']" position="attributes">
+					<attribute name="string">PPN</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/div" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_total']" position="attributes">
+					<attribute name="string">GRAND TOTAL INCLUDE PPN</attribute>
+					<attribute name="nolabel">0</attribute>
+					<attribute name="style">color: red</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='margin']" position="after">
+					<field name="gross_profit" style="color: green"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='customer_signature']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+
+<!--		SQ/SO Project-->
+
+		<record id="view_order_form_project_inherit" model="ir.ui.view">
+			<field name="name">view.order.form.project.inherit</field>
+			<field name="model">sale.order</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//header/field[@name='state']" position="replace">
+					<field name="state" widget="statusbar" statusbar_visible="draft,order,admin,fat2,director,ppic,fat,sale"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_confirm']" position="after">
+					<button name="action_validate" id="action_validate_sales_project"
+							string="Validate" type="object" groups="mgm.mgm_group_sales"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['order'])]}"/>
+					<button name="action_validate" id="action_validate_admin_project"
+							string="validate" type="object" groups="mgm.mgm_group_admin_sales"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['admin'])]}"/>
+					<button name="action_validate" id="action_validate_fat_project"
+							string="Validate" type="object" groups="mgm.mgm_group_fat"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['fat'])]}"/>
+					<button name="action_validate" id="action_validate_fat2_project"
+							string="Validate" type="object" groups="mgm.mgm_group_manager_fat"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['fat2'])]}"/>
+					<button name="action_validate" id="action_validate_dir_project"
+							string="Validate" type="object" groups="mgm.mgm_group_director"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['director'])]}"/>
+					<button name="action_confirm" id="action_validate_ppic_project"
+							string="Validate" type="object" groups="mgm.mgm_group_ppic"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['ppic'])]}"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_confirm'][1]" position="replace">
+					<button name="action_validate" id="action_validate_sales_project"
+							string="Confirm" type="object"
+							style="background-color: #4CAF50; color: white" attrs="{'invisible': [('state', 'not in', ['draft'])]}" groups="mgm.mgm_group_sales"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_confirm'][2]" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_quotation_send']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_quotation_send'][4]" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_cancel']" position="replace">
+					<button name="action_cancel_sq" id="sales_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['order'])]}" groups="mgm.mgm_group_sales"/>
+					<button name="action_cancel_sq" id="admin_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['admin'])]}" groups="mgm.mgm_group_admin_sales"/>
+					<button name="action_cancel_sq" id="manager_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['manager'])]}" groups="mgm.mgm_group_manager_sales"/>
+					<button name="action_cancel_sq" id="ar_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['fat'])]}" groups="mgm.mgm_group_fat"/>
+					<button name="action_cancel_sq" id="manager_fat_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['fat2'])]}" groups="mgm.mgm_group_manager_fat"/>
+					<button name="action_cancel_sq" id="director_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['director'])]}" groups="mgm.mgm_group_director"/>
+					<button name="action_cancel_sq" id="ppic_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['ppic'])]}" groups="mgm.mgm_group_ppic"/>
+					<button name="action_cancel_sq" id="approved_cancel" type="object" string="Cancel" style="background-color: red; color: white" attrs="{'invisible': [('state', 'not in', ['sale'])]}" groups="mgm.mgm_group_ppic"/>
+				</xpath>
+
+				<xpath expr="//header/button[@name='action_draft']" position="attributes">
+					<attribute name="groups">mgm.mgm_group_sales</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/div/button[@name='preview_sale_order']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[1]/field[@name='partner_shipping_id']" position="after">
+					<field name="project_name"/>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='validity_date']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="attributes">
+					<attribute name="string">Payment Method</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="before">
+					<field name="commitment_date" readonly="False"/>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="after">
+					<field name="period" attrs="{'invisible': [('payment_term_name','!=','Tempo')],'required': [('payment_term_name','=','Tempo')],'readonly':[('state','not in',['draft','sent','order','admin'])]}"/>
+					<label for="down_payment" attrs="{'invisible': [('payment_term_name','not in',['DP - Cash Before Delivery','DP - Cash On Delivery','Tempo'])]}"/>
+					<div attrs="{'invisible': [('payment_term_name','not in',['DP - Cash Before Delivery','DP - Cash On Delivery','Tempo'])]}">
+						<field name="type_dp" class="oe_inline" attrs="{'readonly':[('state','not in',['draft','sent','order','admin'])]}"  style="margin-right:10px;"/>
+						<field name="down_payment" attrs="{'required': [('payment_term_name','in',['DP - Cash Before Delivery','DP - Cash On Delivery'])],'readonly':[('state','not in',['draft','sent','order','admin'])]}" class="oe_inline"/>
+					</div>
+					<field name="on_credit"/>
+<!--					<p style="color:red" attrs="{'invisible': ['|','|',('payment_term_name','!=','Tempo'),('on_credit', '=', False),('payment_term_id','=',False)]}">-->
+<!--						<b>-->
+<!--							<i>-->
+<!--								Check payment, signature and stamp on SQ/SO.-->
+<!--							</i>-->
+<!--						</b>-->
+<!--					</p>-->
+					<field name="so_type" invisible="True"/>
+				</xpath>
+
+				<xpath expr="//sheet/group/group[2]/field[@name='payment_term_id']" position="attributes">
+					<attribute name="attrs">{'readonly': [('state','not in', ('draft','sent','order','admin'))]}</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='%(sale.action_view_sale_advance_payment_inv)d'][1]" position="attributes">
+					<attribute name="groups">mgm.mgm_group_fat</attribute>
+					<attribute name="attrs">{'invisible': [('state', 'not in', ['sale', 'done'])]}</attribute>
+				</xpath>
+
+				<xpath expr="//header/button[@name='%(sale.action_view_sale_advance_payment_inv)d'][2]" position="attributes">
+					<attribute name="groups">mgm.mgm_group_fat</attribute>
+					<attribute name="attrs">{'invisible': ['|',('invoice_status', '!=', 'no'), ('state', 'not in', ['sale', 'done'])]}</attribute>
+				</xpath>
+
+<!--				<xpath expr="//sheet/notebook/page[@name='other_information']/group/group[@name='sales_person']/field[@name='user_id']" position="attributes">-->
+<!--					<attribute name="readonly">1</attribute>-->
+<!--				</xpath>-->
+
+				<xpath expr="//sheet/notebook/page[@name='other_information']" position="inside">
+					<group>
+						<group name="order_details" string="Order Details">
+							<field name="products" readonly="True"/>
+							<field name="services" readonly="True"/>
+							<field name="image_name" invisible="1"/>
+							<field name="image" widget="binary" filename="image_name"/>
+						</group>
+						<group name="payments" string="Payment Details">
+							<field name="proof_of_payment_ids" nolabel="1">
+								<tree editable="bottom">
+									<field name="proof_of_payment_name" invisible="1"/>
+									<field name="proof_of_payment" filename="proof_of_payment_name" widget="binary"/>
+								</tree>
+							</field>
+						</group>
+					</group>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='other_information']" position="after">
+					<page string="Requirements" name="customer_requirements" attrs="{'invisible': ['|',('payment_term_name','not in', ['Tempo']),('payment_term_id','=', False),]}">
+						<group>
+							<group string="Requirements">
+								<field name="is_person" invisible="1"/>
+								<field name="payment_term_name" invisible="1"/>
+								<field name="skdu_so_customer_file_name" invisible="1"/>
+								<field name="skdu_so_customer" widget="binary" filename="skdu_so_customer_file_name" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="npwp_so_customer_file_name" invisible="1"/>
+								<field name="npwp_so_customer" widget="binary" filename="npwp_so_customer_file_name" attrs="{'invisible': [('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="ktp_so_customer_file_name" invisible="1"/>
+								<field name="ktp_so_customer" widget="binary" filename="ktp_so_customer_file_name" attrs="{'invisible': [('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="siup_so_customer_file_name" invisible="1"/>
+								<field name="siup_so_customer" widget="binary" filename="siup_so_customer_file_name" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="mou_so_customer_file_name" invisible="1"/>
+								<field name="mou_so_customer" widget="binary" filename="mou_so_customer_file_name" attrs="{'invisible': ['|',('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery']),('period','&lt;', 30)]}"/>
+<!--								<field name="memo_so_customer_file_name" invisible="1"/>-->
+<!--								<field name="memo_so_customer" widget="binary" filename="memo_so_customer_file_name" attrs="{'invisible': ['|',('payment_term_name','not in', ['Tempo']),('period','&gt;=', 30)],'readonly':[('state','not in',['draft','sent','order','admin'])]}"/>-->
+							</group>
+							<group string="Validation" attrs="{'invisible': [('state','not in', ['admin','fat','fat2','director','ppic'])]}">
+								<p style="color:red">
+									<b>
+										<i>
+											By checking the validation column below, you have verified the correctness of the data.
+										</i>
+									</b>
+								</p>
+								<field name="validate_skdu" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_npwp" attrs="{'invisible': [('payment_term_name', 'in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_ktp" attrs="{'invisible': [('payment_term_name', 'in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_siup" attrs="{'invisible': ['|',('is_person','=', True),('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery'])]}"/>
+								<field name="validate_mou" attrs="{'invisible': ['|',('payment_term_name','in', ['Cash Before Delivery','DP - Cash Before Delivery']),('period','&lt;', 30)]}"/>
+<!--								<field name="validate_mi" attrs="{'invisible': ['|',('payment_term_name','not in', ['Cash Before Delivery','DP - Cash Before Delivery','Tempo']),('period','&gt;=', 30)]}"/>-->
+							</group>
+						</group>
+					</page>
+					<page string="Cancellation" name="cancellation" attrs="{'invisible': [('reason_cancellation_ids','=', [])]}">
+						<group>
+							<field name="reason_cancellation_ids" nolabel="1" readonly="1">
+								<tree>
+									<field name="user_id"/>
+									<field name="reason"/>
+									<field name="state" string="State"/>
+									<field name="create_date" string="Date"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+					<page string="Complaint" name="complaint" attrs="{'invisible': [('customer_complain_ids','=', [])]}">
+						<group>
+							<field name="customer_complain_ids" nolabel="1" readonly="1">
+								<tree>
+									<field name="date"/>
+									<field name="report"/>
+									<field name="action"/>
+									<field name="pic"/>
+									<field name="due_date"/>
+									<field name="information"/>
+									<field name="state"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="before">
+					<field name="notes"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="before">
+					<field name="routing" readonly="True"/>
+					<field name="width"/>
+					<field name="height"/>
+					<field name="thick" readonly="True"/>
+					<field name="qty"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_id']" position="attributes">
+					<attribute name="string">Description</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='name']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+					<field name="area"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+					<!--					<field name="unit_price" readonly="False"/>-->
+					<field name="add_cost"/>
+					<!--					TODO: kenapa bisa readonly??-->
+					<field name="total" readonly="False"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_subtotal']" position="replace">
+					<field name="disc_value" groups="product.group_discount_per_so_line" optional="show"/>
+					<field name="price_subtotal"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_untaxed']" position="replace">
+					<field name="amount_undisc"/>
+					<field name="amount_disc"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_tax']" position="before">
+					<field name="grand_total_after_disc"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_tax']" position="attributes">
+					<attribute name="string">PPN</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/div" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='order_lines']/group[@name='note_group']/group[@name='sale_total']/field[@name='amount_total']" position="attributes">
+					<attribute name="string">GRAND TOTAL INCLUDE PPN</attribute>
+					<attribute name="nolabel">0</attribute>
+					<attribute name="style">color: red</attribute>
+				</xpath>
+
+				<xpath expr="//field[@name='margin']" position="after">
+					<field name="gross_profit" style="color: green"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page[@name='customer_signature']" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

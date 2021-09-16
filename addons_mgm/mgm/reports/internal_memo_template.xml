@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="im_document">
+		<t t-name="im_document">
+			<div style="font-size:14px">
+				<div class="header">
+					<div class="row">
+						<div class="col-3"></div>
+						<div class="col-6"></div>
+						<div class="col-3">
+							<img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height:60pt;max-width:100%" alt="Company Logo"/>
+						</div>
+					</div>
+				</div>
+				<div class="page">
+					<br/>
+					<h2 style="text-align:center">INTERNAL MEMO</h2>
+					<br/>
+					<br/>
+					<table style="width:100%">
+						<tr>
+							<td style="width: 150px">No. Surat</td>
+							<td>: </td>
+							<td>
+								<span t-esc="doc.get_number_im()" />
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 150px">Perihal</td>
+							<td>:</td>
+							<td>Permintaan pesanan agar diproses terlebih dahulu, pembayaran
+								<t t-if="doc.payment_term_id.name == 'Tempo'">
+									<t t-set="payment_term" t-value="'%s %s Hari' % (doc.payment_term_id.name, doc.period)"/>
+									<span t-esc="payment_term"/>
+								</t>
+								<t t-else="">
+									<span t-field="doc.payment_term_id.name"/>
+								</t>
+							</td>
+						</tr>
+					</table>
+					<br/>
+					<br/>
+					<p>
+						Dengan Hormat, <br/><br/>
+						Dengan ini mohon Release Work Order untuk pesanan dengan rincian sebagai berikut:<br/><br/>
+						<table style="width:100%">
+							<tr>
+								<td style="width: 150px">Nama Customer</td>
+								<td>:</td>
+								<td><span t-field="doc.partner_id.name"/> </td>
+							</tr>
+							<tr>
+								<td style="width: 150px">No. SQ</td>
+								<td>:</td>
+								<td><span t-field="doc.name"/> </td>
+							</tr>
+							<tr>
+								<td style="width: 150px">Jumlah</td>
+								<td>:</td>
+								<td><span t-field="doc.amount_total"/> </td>
+							</tr>
+							<tr>
+								<td style="width: 150px">Nama Sales</td>
+								<td>:</td>
+								<td><span t-field="doc.user_id.name"/> </td>
+							</tr>
+							<tr>
+								<td style="width: 150px">Area</td>
+								<td>:</td>
+								<td>
+									<span t-field="doc.user_id.area"/>
+								</td>
+							</tr>
+						</table>
+						<br/>
+						<br/>
+						Mohon pesanan agar dipesan dan dikirim terlebih dahulu. Pesanan kaca akan dibayarkan full payment setelah kaca jadi, pembayaran <td>
+						<t t-if="doc.payment_term_id.name == 'Tempo'">
+							<t t-set="payment_term" t-value="'%s %s Hari' % (doc.payment_term_id.name, doc.period)"/>
+							<span t-esc="payment_term"/>
+						</t>
+						<t t-else="">
+							<span t-field="doc.payment_term_id.name"/>
+						</t>
+					</td>. Apabila <span t-field="doc.partner_id.name"/> tidak membayar pesanan ini, saya sebagai <i>Salesman</i> bertanggung jawab untuk membayar pesanan tersebut dengan potongan gaji. Mohon dibantu untuk pesanan ini diproses terlebih dahulu.<br/><br/>
+						Demikian Internal Memo ini saya buat, atas bantuan dan kerjasamanya saya ucapkan banyak Terima Kasih<br/><br/>
+						Jakarta, <span t-esc="datetime.datetime.now().strftime('%d %b %Y')"></span>
+						<br/>
+						<br/>
+						<t t-set="hr_admin" t-value="doc.get_hr_admin()"/>
+						<table style="width:100%;text-align:center">
+							<tr>
+								<td style="width: 50%">Hormat saya,</td>
+								<td style="width: 50%">Menyetujui,</td>
+							</tr>
+							<tr style="height:3cm">
+								<td>
+									<t t-if="doc.user_id.signature">
+										<img t-att-src="image_data_uri(doc.user_id.signature)" style="max-height: 3cm;"/>
+									</t>
+								</td>
+								<td>
+									<t t-if="hr_admin">
+										<img t-att-src="image_data_uri(hr_admin.signature)" style="max-height: 3cm;"/>
+									</t>
+								</td>
+							</tr>
+							<tr>
+								<td><span t-field="doc.user_id.name"/></td>
+								<td>
+									<t t-if="hr_admin">
+										<span t-esc="hr_admin.name" />
+									</t>
+								</td>
+							</tr>
+							<tr>
+								<td>Salesman</td>
+								<td>HR Admin</td>
+							</tr>
+						</table>
+					</p>
+				</div>
+				<div class="footer">
+					<div class="row">
+						<div class="col-3">
+							<span t-field="doc.company_id.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+						</div>
+						<div class="col-3"></div>
+							T: <span t-field="doc.company_id.partner_id.phone"/><br/>
+							F: (+62 21) 461 0266<br/>
+							<span t-field="doc.company_id.partner_id.email"/>
+						<div class="col-6"></div>
+					</div>
+				</div>
+			</div>
+		</t>
+	</template>
+	<template id="internal_memo">
+		<t t-name="studio_main_report">
+			<t t-call="web.basic_layout">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="mgm.im_document"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

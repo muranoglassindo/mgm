@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record model="ir.ui.view" id="daily_report_form">
+		<field name="name">daily.report.form</field>
+		<field name="model">daily.report</field>
+		<field name="arch" type="xml">
+			<form create="false">
+				<sheet>
+					<group>
+						<field name="date" readonly="True"/>
+						<field name="name"/>
+						<field name="area"/>
+						<field name="customer"/>
+						<field name="phone"/>
+						<field name="stamp"/>
+						<field name="sign" string="Signature"/>
+						<field name="report"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="daily_report_tree">
+		<field name="name">daily.report.tree</field>
+		<field name="model">daily.report</field>
+		<field name="arch" type="xml">
+			<tree create="false">
+				<field name="date"/>
+				<field name="name"/>
+				<field name="area"/>
+				<field name="customer"/>
+				<field name="phone"/>
+				<field name="stamp"/>
+				<field name="sign" string="Signature"/>
+				<field name="report"/>
+			</tree>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="daily_report_search">
+		<field name="name">daily.report.search</field>
+		<field name="model">daily.report</field>
+		<field name="arch" type="xml">
+			<search string="Daily Report">
+				<field name="name"/>
+				<field name="date"/>
+				<field name="area"/>
+				<field name="customer"/>
+				<filter name="group_by_sales" string="Sales" domain="[]" context="{'group_by':'name'}"/>
+				<filter name="group_by_area" string="Area" domain="[]" context="{'group_by':'area'}"/>
+				<filter name="group_by_customer" string="Customer" domain="[]" context="{'group_by':'customer'}"/>
+				<filter name="group_by_stamp" string="Stamp" domain="[]" context="{'group_by':'stamp'}"/>
+				<filter name="group_by_sign" string="Signature" domain="[]" context="{'group_by':'sign'}"/>
+				<filter string="Visit Date" name="group_by_month" domain="[]" context="{'group_by': 'date'}"/>
+			</search>
+		</field>
+	</record>
+
+
+	<act_window id="action_daily_report"
+			name="Daily Report"
+			res_model="daily.report.memory"
+			context="{'search_default_group_by_sales': 3, 'search_default_group_by_area': 2, 'search_default_group_by_month': 1}"
+			binding_model="daily.report"
+			binding_views="list"
+			view_mode="form"
+	/>
+
+</odoo>

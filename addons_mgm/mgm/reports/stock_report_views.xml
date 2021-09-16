@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="paperformat_report_stock_picking" model="report.paperformat">
+			<field name="name">Format Report Stock Picking</field>
+			<field name="default" eval="False"/>
+			<field name="format">A5</field>
+			<field name="orientation">Landscape</field>
+			<field name="margin_top">25</field>
+			<field name="margin_bottom">7</field>
+			<field name="margin_left">20</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">23</field>
+			<field name="dpi">96</field>
+		</record>
+
+		<report
+				string="Picking Operations"
+				id="stock.action_report_picking"
+				model="stock.picking"
+				report_type="qweb-pdf"
+				paperformat="mgm.paperformat_report_stock_picking"
+				name="mgm.stock_picking_report"
+				file="mgm.stock_picking_report"
+				print_report_name="'%s-%s-%s' % (object.partner_id.name, object.name, object.origin)"
+		/>
+
+		<report id="stock.action_label_transfer_template_zpl"
+				model="stock.picking"
+				string="Barcodes (ZPL)"
+				name="stock.label_transfer_template_view_zpl"
+				file="stock.label_transfer_template_view_zpl"
+				report_type="qweb-text"
+				menu="False"
+		/>
+
+		<report id="stock.action_label_transfer_template_pdf"
+				model="stock.picking"
+				string="Barcodes (PDF)"
+				name="stock.label_transfer_template_view_pdf"
+				file="stock.label_transfer_template_view_pdf"
+				report_type="qweb-pdf"
+				menu="False"
+		/>
+
+		<report
+				string="Delivery Slip"
+				id="stock.action_report_delivery"
+				model="stock.picking"
+				report_type="qweb-pdf"
+				name="stock.report_deliveryslip"
+				file="stock.report_deliveryslip"
+				print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+				menu="False"
+		/>
+	</data>
+</odoo>
